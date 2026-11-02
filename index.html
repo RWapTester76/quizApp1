@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#080a10">
+<title>БАЗЗЕР — прототип</title>
+<style>
+  :root{
+    --bg:#080a10;
+    --surface:#121722;
+    --surface-2:#1a2130;
+    --line:#232c3d;
+    --text:#eaf0ff;
+    --muted:#77839c;
+    --accent:#4f8cff;
+    --accent-2:#7b5cff;
+    --buzz:#ff2e55;
+    --ok:#24d18a;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{height:100%;margin:0;}
+  body{
+    background:radial-gradient(120% 80% at 50% 0%, #131a2a 0%, #080a10 60%);
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sans-serif;
+    overscroll-behavior:none;
+  }
+
+  /* ---------- экраны ---------- */
+  .screen{
+    position:fixed;inset:0;display:none;flex-direction:column;
+    padding:calc(env(safe-area-inset-top) + 14px) 18px calc(env(safe-area-inset-bottom) + 18px);
+    overflow-y:auto;
+  }
+  .screen.active{display:flex;animation:fade .22s ease;}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  /* ---------- главный экран ---------- */
+  #home{justify-content:center;align-items:center;gap:34px;text-align:center;}
+  .logo-mark{
+    width:88px;height:88px;margin:0 auto 18px;border-radius:50%;
+    display:grid;place-items:center;font-size:40px;
+    background:radial-gradient(circle at 32% 28%, #ff6b81, #ff2e55 48%, #b3123a);
+    box-shadow:0 0 0 10px rgba(255,46,85,.10), 0 18px 50px rgba(255,46,85,.35);
+    animation:breathe 2.4s ease-in-out infinite;
+  }
+  @keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+  h1{margin:0;font-size:30px;letter-spacing:.22em;font-weight:800;}
+  .sub{margin:8px 0 0;color:var(--muted);font-size:14px;}
+  .stack{display:flex;flex-direction:column;gap:12px;width:100%;max-width:340px;}
+  .hint{color:var(--muted);font-size:12px;max-width:320px;line-height:1.5;}
+
+  /* ---------- элементы ---------- */
+  .btn{
+    appearance:none;border:none;cursor:pointer;font-family:inherit;
+    width:100%;padding:17px 20px;border-radius:16px;font-size:16px;font-weight:700;
+    color:#fff;transition:transform .08s ease, filter .15s ease;
+    touch-action:manipulation;user-select:none;
+  }
+  .btn:active{transform:scale(.975);}
+  .btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent-2));box-shadow:0 10px 30px rgba(79,140,255,.32);}
+  .btn-ghost{background:var(--surface);border:1px solid var(--line);color:var(--text);}
+  .btn-danger{background:linear-gradient(135deg,#ff4d6a,#c81e3e);box-shadow:0 10px 30px rgba(255,46,85,.28);}
+
+  .bar{
+    display:flex;align-items:center;justify-content:space-between;
+    gap:10px;margin-bottom:16px;flex:none;
+  }
+  .room-code{font-size:13px;color:var(--muted);letter-spacing:.06em;}
+  .room-code b{color:var(--text);font-size:17px;letter-spacing:.18em;font-weight:800;margin-left:4px;}
+  .icon-btn{
+    width:42px;height:42px;flex:none;border-radius:12px;border:1px solid var(--line);
+    background:var(--surface);color:var(--text);font-size:17px;cursor:pointer;
+    display:grid;place-items:center;transition:background .15s;
+  }
+  .icon-btn:active{background:var(--surface-2);}
+
+  .content{display:flex;flex-direction:column;gap:14px;flex:1;min-height:0;}
+  .panel{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:14px;}
+  .row-between{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+  .label{font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-weight:700;}
+  .pill{
+    min-width:26px;height:26px;padding:0 9px;border-radius:999px;display:grid;place-items:center;
+    background:var(--surface-2);border:1px solid var(--line);font-size:13px;font-weight:700;
+  }
+  .players{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip{
+    display:inline-flex;align-items:center;gap:7px;padding:8px 13px;border-radius:999px;
+    background:var(--surface-2);border:1px solid var(--line);font-size:14px;
+    animation:pop .25s ease;
+  }
+  .chip::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--ok);box-shadow:0 0 8px var(--ok);}
+  @keyframes pop{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
+  .muted{color:var(--muted);font-size:14px;}
+
+  .input{
+    width:100%;padding:16px;border-radius:14px;border:1px solid var(--line);
+    background:var(--surface);color:var(--text);font-size:16px;font-family:inherit;outline:none;
+    transition:border-color .15s, box-shadow .15s;
+  }
+  .input::placeholder{color:#4b5568;}
+  .input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(79,140,255,.15);}
+  .field{display:flex;flex-direction:column;gap:8px;}
+
+  /* ---------- хост: живой раунд ---------- */
+  .live-head{
+    display:flex;align-items:center;gap:9px;font-size:13px;font-weight:700;
+    text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:12px;
+  }
+  .live-dot{width:9px;height:9px;border-radius:50%;background:#3a4358;}
+  .live-head.on .live-dot{background:var(--buzz);box-shadow:0 0 10px var(--buzz);animation:blink 1s infinite;}
+  .live-head.on{color:var(--buzz);}
+  @keyframes blink{50%{opacity:.35}}
+  .timer{margin-left:auto;font-variant-numeric:tabular-nums;color:var(--text);letter-spacing:0;}
+
+  .question-show{
+    font-size:17px;line-height:1.4;padding:12px 14px;border-radius:14px;
+    background:var(--surface-2);border:1px solid var(--line);margin-bottom:12px;color:var(--text);
+  }
+  .buzz-list{display:flex;flex-direction:column;gap:8px;}
+  .buzz-item{
+    display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;
+    background:var(--surface-2);border:1px solid var(--line);animation:slideIn .28s ease;
+  }
+  @keyframes slideIn{from{opacity:0;transform:translateX(-12px)}to{opacity:1;transform:none}}
+  .buzz-item .place{
+    width:30px;height:30px;flex:none;border-radius:50%;display:grid;place-items:center;
+    font-weight:800;font-size:13px;background:var(--line);color:var(--text);
+  }
+  .buzz-item:nth-child(1) .place{background:linear-gradient(135deg,#ffd76e,#ff9f1a);color:#231600;}
+  .buzz-item:nth-child(2) .place{background:linear-gradient(135deg,#e6ecf5,#a9b6c9);color:#1a1f28;}
+  .buzz-item:nth-child(3) .place{background:linear-gradient(135deg,#e8a274,#c07a45);color:#241505;}
+  .buzz-name{flex:1;font-weight:600;font-size:15px;}
+  .buzz-time{font-variant-numeric:tabular-nums;color:var(--muted);font-size:13px;}
+
+  /* ---------- игрок: баззер ---------- */
+  #play .content{justify-content:center;align-items:center;gap:22px;}
+  .player-question{
+    text-align:center;font-size:16px;line-height:1.4;color:var(--text);
+    max-width:320px;padding:0 4px;
+  }
+  .player-question:empty{display:none;}
+  .status{
+    text-align:center;font-size:14px;font-weight:700;letter-spacing:.06em;
+    text-transform:uppercase;color:var(--muted);min-height:20px;
+  }
+  .buzzer-wrap{position:relative;display:grid;place-items:center;}
+  .buzzer-wrap.armed::before{
+    content:"";position:absolute;inset:-16px;border-radius:50%;
+    border:2px solid rgba(255,46,85,.45);animation:ring 1.5s ease-out infinite;
+  }
+  @keyframes ring{0%{transform:scale(.94);opacity:.9}100%{transform:scale(1.18);opacity:0}}
+  .buzzer{
+    width:min(68vw,260px);height:min(68vw,260px);border-radius:50%;border:none;cursor:pointer;
+    background:radial-gradient(circle at 32% 26%, #ff7b8f, #ff2e55 46%, #a80f36 100%);
+    box-shadow:0 0 0 10px rgba(255,46,85,.10), 0 22px 60px rgba(255,46,85,.42),
+               inset 0 -12px 34px rgba(0,0,0,.38);
+    color:#fff;font-size:clamp(20px,7vw,30px);font-weight:900;letter-spacing:.14em;
+    font-family:inherit;touch-action:manipulation;user-select:none;
+    transition:transform .09s ease, filter .2s ease, box-shadow .25s ease;
+  }
+  .buzzer:active:not(:disabled){transform:scale(.93);}
+  .buzzer:disabled{filter:grayscale(.75) brightness(.45);box-shadow:none;cursor:default;}
+  .buzzer.pressed{animation:hit .4s ease;}
+  @keyframes hit{0%{transform:scale(.9)}50%{transform:scale(1.04)}100%{transform:scale(1)}}
+
+  .result{text-align:center;min-height:76px;display:flex;flex-direction:column;align-items:center;gap:2px;}
+  .place-big{
+    font-size:52px;font-weight:900;line-height:1;
+    background:linear-gradient(135deg,#ffd76e,#ff9f1a);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    animation:pop .3s ease;
+  }
+  .place-sub{font-size:12px;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);}
+
+  .rooms{display:flex;flex-wrap:wrap;gap:8px;min-height:0;}
+  .room-chip{
+    padding:10px 15px;border-radius:12px;background:var(--surface-2);
+    border:1px solid var(--line);font-size:14px;font-weight:600;cursor:pointer;
+    display:flex;align-items:center;gap:8px;transition:border-color .15s;
+  }
+  .room-chip:active{border-color:var(--accent);}
+  .room-chip small{color:var(--muted);font-weight:500;font-size:12px;}
+</style>
+</head>
+<body>
+
+<!-- ================= ГЛАВНЫЙ ЭКРАН ================= -->
+<div class="screen active" id="home">
+  <div>
+    <div class="logo-mark">◉</div>
+    <h1>БАЗЗЕР</h1>
+    <p class="sub">Кто первый — тот и отвечает</p>
+  </div>
+  <div class="stack">
+    <button class="btn btn-primary" data-go="host">Я ведущий</button>
+    <button class="btn btn-ghost" data-go="join">Я игрок</button>
+  </div>
+  <p class="hint">Прототип. Откройте этот файл во второй вкладке — она станет вторым устройством.</p>
+</div>
+
+<!-- ================= ВЕДУЩИЙ ================= -->
+<div class="screen" id="host">
+  <div class="bar">
+    <button class="icon-btn" id="hostBack">←</button>
+    <div class="room-code">Комната <b id="hostCode">—</b></div>
+    <button class="icon-btn" id="hostShare">⧉</button>
+  </div>
+
+  <div class="content">
+    <div class="panel">
+      <div class="row-between">
+        <span class="label">Игроки в комнате</span>
+        <span class="pill" id="hostCount">0</span>
+      </div>
+      <div class="players" id="hostPlayers"></div>
+    </div>
+
+    <div class="field">
+      <input class="input" id="questionInput" placeholder="Вопрос раунда (необязательно)" maxlength="120">
+    </div>
+
+    <div class="panel" id="hostLive" hidden>
+      <div class="live-head" id="liveHead">
+        <span class="live-dot"></span>
+        <span id="liveStatus">Раунд идёт</span>
+        <span class="timer" id="hostTimer">0.0с</span>
+      </div>
+      <div class="question-show" id="hostQuestion" hidden></div>
+      <div class="buzz-list" id="buzzList"></div>
+    </div>
+
+    <button class="btn btn-primary" id="btnMain">Начать раунд</button>
+  </div>
+</div>
+
+<!-- ================= ВХОД ИГРОКА ================= -->
+<div class="screen" id="join">
+  <div class="bar">
+    <button class="icon-btn" id="joinBack">←</button>
+    <div class="room-code">Подключение</div>
+    <div style="width:42px"></div>
+  </div>
+  <div class="content">
+    <div class="field">
+      <span class="label">Ваше имя</span>
+      <input class="input" id="playerName" placeholder="Например, Аня" maxlength="16">
+    </div>
+    <div class="field">
+      <span class="label">Код комнаты</span>
+      <input class="input" id="roomCodeInput" placeholder="0000" inputmode="numeric" maxlength="4">
+    </div>
+    <div class="rooms" id="foundRooms"></div>
+    <button class="btn btn-primary" id="btnJoin" style="margin-top:auto">Войти в игру</button>
+  </div>
+</div>
+
+<!-- ================= ИГРОК ================= -->
+<div class="screen" id="play">
+  <div class="bar">
+    <div class="room-code">Комната <b id="playCode">—</b></div>
+    <button class="icon-btn" id="playLeave">✕</button>
+  </div>
+  <div class="content">
+    <div class="player-question" id="playerQuestion"></div>
+    <div class="status" id="playerStatus">Ожидание ведущего…</div>
+    <div class="buzzer-wrap" id="buzzerWrap">
+      <button class="buzzer" id="buzzerBtn" disabled>ЖМИ</button>
+    </div>
+    <div class="result" id="playerResult"></div>
+  </div>
+</div>
+
+<script>
+/* =========================================================
+   УТИЛИТЫ
+   ========================================================= */
+const $  = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const uid = () => Math.random().toString(36).slice(2, 10);
+const esc = s => String(s).replace(/[&<>"']/g, c =>
+  ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+/* =========================================================
+   ШИНА СООБЩЕНИЙ
+   BroadcastChannel — между вкладками одного браузера.
+   На реальном устройстве здесь будет WebSocket / BLE.
+   ========================================================= */
+const bus = (() => {
+  if ('BroadcastChannel' in window) {
+    const ch = new BroadcastChannel('buzzer-proto-v1');
+    const hs = [];
+    ch.onmessage = e => hs.forEach(h => h(e.data));
+    return { send: m => ch.postMessage(m), on: f => hs.push(f) };
+  }
+  // fallback для старых браузеров
+  const hs = [];
+  window.addEventListener('storage', e => {
+    if (e.key === 'bz_msg' && e.newValue) {
+      try { const m = JSON.parse(e.newValue); hs.forEach(h => h(m)); } catch(_) {}
+    }
+  });
+  return {
+    send: m => localStorage.setItem('bz_msg', JSON.stringify({ ...m, _r: Math.random() })),
+    on: f => hs.push(f)
+  };
+})();
+
+/* =========================================================
+   ЗВУК
+   ========================================================= */
+let actx = null;
+function beep(freq = 880, dur = 0.07, type = 'sine', vol = 0.18) {
+  try {
+    actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+    const t = actx.currentTime;
+    const o = actx.createOscillator();
+    const g = actx.createGain();
+    o.type = type;
+    o.frequency.value = freq;
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(vol, t + 0.008);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g); g.connect(actx.destination);
+    o.start(t); o.stop(t + dur + 0.03);
+  } catch (_) {}
+}
+
+/* =========================================================
+   НАВИГАЦИЯ
+   ========================================================= */
+function show(id) {
+  $$('.screen').forEach(s => s.classList.toggle('active', s.id === id));
+}
+
+/* =========================================================
+   СОСТОЯНИЕ ВЕДУЩЕГО
+   ========================================================= */
+const host = {
+  code: null,
+  players: [],   // {id, name}
+  round: null,   // {id, question, startAt, active, buzzes:[{playerId,name,ms}]}
+  timer: null
+};
+
+function startHost() {
+  if (!host.code) {
+    host.code = String(Math.floor(1000 + Math.random() * 9000));
+    host.players = [];
+    host.round = null;
+    $('#hostCode').textContent = host.code;
+    $('#questionInput').value = '';
+    $('#hostQuestion').hidden = true;
+    renderHostPlayers();
+    renderHostRound();
+    startAnnounce();
+  }
+}
+
+function hostBroadcast() {
+  bus.send({
+    type: 'state',
+    code: host.code,
+    players: host.players,
+    round: host.round ? {
+      id: host.round.id,
+      question: host.round.question,
+      active: host.round.active,
+      buzzes: host.round.buzzes
+    } : null
+  });
+}
+
+/* ---------- объявление комнаты для списка найденных ---------- */
+function startAnnounce() {
+  setInterval(() => {
+    if (host.code) bus.send({ type: 'announce', code: host.code, count: host.players.length });
+  }, 1200);
+}
+
+/* ---------- рендер: игроки ---------- */
+function renderHostPlayers() {
+  $('#hostCount').textContent = host.players.length;
+  $('#hostPlayers').innerHTML = host.players.length
+    ? host.players.map(p => `<span class="chip">${esc(p.name)}</span>`).join('')
+    : '<span class="muted">Никто не подключился…</span>';
+}
+
+/* ---------- рендер: раунд ---------- */
+function renderHostRound() {
+  const r = host.round;
+  const live = $('#hostLive');
+
+  if (!r) {
+    live.hidden = true;
+    $('#btnMain').textContent = 'Начать раунд';
+    $('#btnMain').className = 'btn btn-primary';
+    return;
+  }
+
+  live.hidden = false;
+
+  const head = $('#liveHead');
+  head.classList.toggle('on', r.active);
+  $('#liveStatus').textContent = r.active ? 'Раунд идёт' : 'Раунд завершён';
+
+  const q = $('#hostQuestion');
+  if (r.question) { q.textContent = r.question; q.hidden = false; }
+  else { q.hidden = true; }
+
+  $('#btnMain').textContent = r.active ? 'Завершить раунд' : 'Начать новый раунд';
+  $('#btnMain').className = r.active ? 'btn btn-danger' : 'btn btn-primary';
+
+  renderBuzzList();
+
+  if (!r.active) $('#hostTimer').textContent = '';
+}
+
+function renderBuzzList() {
+  const list = $('#buzzList');
+  if (!host.round || !host.round.buzzes.length) {
+    list.innerHTML = '<div class="muted">Пока никто не нажал…</div>';
+    return;
+  }
+  list.innerHTML = host.round.buzzes.map((b, i) => `
+    <div class="buzz-item">
+      <span class="place">${i + 1}</span>
+      <span class="buzz-name">${esc(b.name)}</span>
+      <span class="buzz-time">${(b.ms / 1000).toFixed(2)} с</span>
+    </div>`).join('');
+}
+
+/* ---------- таймер раунда ---------- */
+function startTimer() {
+  stopTimer();
+  host.timer = setInterval(() => {
+    if (!host.round || !host.round.active) return;
+    $('#hostTimer').textContent = ((Date.now() - host.round.startAt) / 1000).toFixed(1) + 'с';
+  }, 100);
+}
+function stopTimer() {
+  clearInterval(host.timer);
+  host.timer = null;
+}
+
+/* ---------- управление раундом ---------- */
+function startRound() {
+  host.round = {
+    id: uid(),
+    question: $('#questionInput').value.trim(),
+    startAt: Date.now(),
+    active: true,
+    buzzes: []
+  };
+  $('#hostTimer').textContent = '0.0с';
+  renderHostRound();
+  hostBroadcast();
+  startTimer();
+  beep(660, 0.1, 'sine', 0.14);
+}
+
+function stopRound() {
+  if (!host.round) return;
+  host.round.active = false;
+  stopTimer();
+  renderHostRound();
+  hostBroadcast();
+  beep(320, 0.16, 'sine', 0.14);
+}
+
+$('#btnMain').addEventListener('click', () => {
+  if (host.round && host.round.active) stopRound();
+  else startRound();
+});
+
+/* =========================================================
+   СОСТОЯНИЕ ИГРОКА
+   ========================================================= */
+const me = {
+  id: uid(),
+  name: '',
+  code: null,
+  roundId: null,
+  buzzed: false
+};
+
+const foundRooms = new Map(); // code -> {count, ts}
+
+function renderFoundRooms() {
+  const now = Date.now();
+  const items = [...foundRooms.entries()]
+    .filter(([, v]) => now - v.ts < 5000)
+    .sort((a, b) => b[1].ts - a[1].ts);
+
+  const box = $('#foundRooms');
+  box.innerHTML = items.length
+    ? items.map(([code, v]) =>
+        `<div class="room-chip" data-code="${code}">Комната ${code} <small>${v.count} 👤</small></div>`
+      ).join('')
+    : '<span class="muted">Ищем комнаты рядом…</span>';
+
+  $$('.room-chip', box).forEach(el => {
+    el.addEventListener('click', () => {
+      $('#roomCodeInput').value = el.dataset.code;
+      beep(900, 0.04, 'sine', 0.1);
+    });
+  });
+}
+setInterval(() => {
+  if ($('#join').classList.contains('active')) renderFoundRooms();
+}, 1000);
+
+/* ---------- применение состояния от ведущего ---------- */
+function applyPlayerState(s) {
+  const r = s.round;
+  const btn = $('#buzzerBtn');
+  const wrap = $('#buzzerWrap');
+  const status = $('#playerStatus');
+  const result = $('#playerResult');
+  const qEl = $('#playerQuestion');
+
+  // новый раунд — сбрасываем локальный флаг
+  if (r && r.id !== me.roundId) { me.roundId = r.id; me.buzzed = false; }
+  if (!r) { me.roundId = null; me.buzzed = false; }
+
+  const myIdx = r ? r.buzzes.findIndex(b => b.playerId === me.id) : -1;
+  const place = myIdx >= 0 ? myIdx + 1 : 0;
+
+  qEl.textContent = (r && r.active && r.question) ? r.question : '';
+
+  if (r && r.active) {
+    if (place) {
+      status.textContent = 'Вы нажали!';
+      result.innerHTML = `<div class="place-big">${place}</div><div class="place-sub">позиция</div>`;
+      btn.disabled = true;
+      wrap.classList.remove('armed');
+      btn.classList.add('pressed');
+    } else if (me.buzzed) {
+      // нажали локально, но ведущий ещё не подтвердил
+      status.textContent = 'Нажато! Ждём…';
+      btn.disabled = true;
+      wrap.classList.remove('armed');
+    } else {
+      status.textContent = 'Жми кнопку!';
+      result.innerHTML = '';
+      btn.disabled = false;
+      btn.classList.remove('pressed');
+      wrap.classList.add('armed');
+    }
+  } else if (r) {
+    // раунд завершён
+    status.textContent = 'Раунд завершён';
+    btn.disabled = true;
+    wrap.classList.remove('armed');
+    result.innerHTML = place
+      ? `<div class="place-big">${place}</div><div class="place-sub">ваша позиция</div>`
+      : '';
+  } else {
+    status.textContent = 'Ожидание ведущего…';
+    btn.disabled = true;
+    wrap.classList.remove('armed');
+    btn.classList.remove('pressed');
+    result.innerHTML = '';
+    qEl.textContent = '';
+  }
+}
+
+/* ---------- нажатие баззера ---------- */
+$('#buzzerBtn').addEventListener('click', () => {
+  const btn = $('#buzzerBtn');
+  if (!me.code || btn.disabled) return;
+
+  btn.disabled = true;
+  me.buzzed = true;
+  navigator.vibrate?.(60);
+  beep(1200, 0.05, 'square', 0.2);
+
+  bus.send({ type: 'buzz', code: me.code, playerId: me.id });
+  $('#playerStatus').textContent = 'Нажато! Ждём…';
+  $('#buzzerWrap').classList.remove('armed');
+});
+
+/* ---------- вход в комнату ---------- */
+$('#btnJoin').addEventListener('click', () => {
+  const name = $('#playerName').value.trim() || 'Игрок';
+  const code = $('#roomCodeInput').value.trim();
+
+  if (!/^\d{4}$/.test(code)) {
+    $('#roomCodeInput').focus();
+    beep(200, 0.15, 'square', 0.12);
+    return;
+  }
+
+  me.name = name;
+  me.code = code;
+  me.roundId = null;
+  me.buzzed = false;
+
+  $('#playCode').textContent = code;
+  $('#playerStatus').textContent = 'Ожидание ведущего…';
+  $('#playerResult').innerHTML = '';
+  $('#playerQuestion').textContent = '';
+  $('#buzzerBtn').disabled = true;
+  $('#buzzerWrap').classList.remove('armed');
+
+  show('play');
+
+  bus.send({ type: 'join', code, player: { id: me.id, name } });
+  bus.send({ type: 'hello', code }); // попросим актуальное состояние
+  beep(880, 0.06, 'sine', 0.15);
+});
+
+/* ---------- выход ---------- */
+function leaveRoom() {
+  if (me.code) bus.send({ type: 'leave', code: me.code, playerId: me.id });
+  me.code = null;
+  me.roundId = null;
+  me.buzzed = false;
+  show('home');
+}
+$('#playLeave').addEventListener('click', leaveRoom);
+window.addEventListener('beforeunload', () => {
+  if (me.code) bus.send({ type: 'leave', code: me.code, playerId: me.id });
+});
+
+/* =========================================================
+   МАРШРУТИЗАТОР СООБЩЕНИЙ
+   ========================================================= */
+bus.on(msg => {
+  /* ---------- сторона ВЕДУЩЕГО ---------- */
+  if (host.code && msg.code === host.code) {
+
+    if (msg.type === 'join' && msg.player) {
+      if (!host.players.some(p => p.id === msg.player.id)) {
+        host.players.push({ id: msg.player.id, name: msg.player.name });
+        renderHostPlayers();
+        beep(1040, 0.05, 'sine', 0.12);
+      }
+      hostBroadcast();
+      return;
+    }
+
+    if (msg.type === 'hello') { hostBroadcast(); return; }
+
+    if (msg.type === 'leave') {
+      host.players = host.players.filter(p => p.id !== msg.playerId);
+      renderHostPlayers();
+      hostBroadcast();
+      return;
+    }
+
+    if (msg.type === 'buzz') {
+      if (!host.round || !host.round.active) return;
+      if (host.round.buzzes.some(b => b.playerId === msg.playerId)) return;
+
+      const p = host.players.find(x => x.id === msg.playerId);
+      host.round.buzzes.push({
+        playerId: msg.playerId,
+        name: p ? p.name : '???',
+        ms: Date.now() - host.round.startAt
+      });
+      renderBuzzList();
+      hostBroadcast();
+      beep(980, 0.07, 'square', 0.16);
+      navigator.vibrate?.(35);
+      return;
+    }
+  }
+
+  /* ---------- сторона ИГРОКА ---------- */
+  if (me.code && msg.code === me.code) {
+    if (msg.type === 'state') applyPlayerState(msg);
+    return;
+  }
+
+  /* ---------- поиск комнат ---------- */
+  if (msg.type === 'announce') {
+    foundRooms.set(msg.code, { count: msg.count, ts: Date.now() });
+  }
+});
+
+/* =========================================================
+   КНОПКИ НАВИГАЦИИ
+   ========================================================= */
+$$('[data-go]').forEach(b => b.addEventListener('click', () => {
+  const go = b.dataset.go;
+  if (go === 'host') { startHost(); show('host'); }
+  if (go === 'join') { renderFoundRooms(); show('join'); }
+}));
+
+$('#hostBack').addEventListener('click', () => {
+  stopTimer();
+  if (host.code) bus.send({ type: 'state', code: host.code, players: [], round: null });
+  host.code = null;
+  host.round = null;
+  host.players = [];
+  show('home');
+});
+
+$('#joinBack').addEventListener('click', () => show('home'));
+
+$('#hostShare').addEventListener('click', async () => {
+  if (!host.code) return;
+  try {
+    await navigator.clipboard.writeText(host.code);
+    $('#hostShare').textContent = '✓';
+    setTimeout(() => $('#hostShare').textContent = '⧉', 1200);
+  } catch (_) {}
+});
+</script>
+</body>
+</html>
