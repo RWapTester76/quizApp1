@@ -1,1355 +1,166 @@
-<!DOCTYPE html>
-<html lang="ru" data-theme="pop-punk" data-mode="dark">
+AXEL ACADEMY v0.2 — ИСХОДНЫЙ КОД
+Файлы объединены в один TXT. Для GitHub Pages удобнее сохранить каждый раздел отдельно
+под исходным именем: index.html, styles.css и app.js.
+
+==============================================================================
+
+ФАЙЛ: index.html (HTML)
+==============================================================================
+<!doctype html>
+<html lang="ru">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
-<meta name="theme-color" content="#0d0810">
-<title>БАЗЗЕР</title>
-<style>
-/* ============================================================
-   БАЗА + ТЁМНАЯ ТЕМА (поп-панк по умолчанию)
-   ============================================================ */
-:root{
-  --font-display:'Impact','Haettenschweiler','Arial Black','Helvetica Neue',system-ui,sans-serif;
-  --font-body:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
-  --bg:#0d0810; --bg-2:#1f0d1a;
-  --surface:#1c1018; --surface-2:#291720;
-  --line:#3d1d2e; --text:#fff0f5; --muted:#b89aa8;
-  --accent:#ff2e88; --accent-2:#00ffb3;
-  --buzz:#ff2e88; --ok:#00ffb3; --bad:#ff4d6a;
-  --tape:rgba(255,240,180,.55);
-  --bg-deco:radial-gradient(circle, rgba(255,46,136,.09) 1px, transparent 1.5px);
-  --bg-deco-size:12px 12px;
-}
-
-/* ---------- 6 стилей: тёмные ---------- */
-[data-theme="pop-punk"]{
-  --bg:#0d0810; --bg-2:#1f0d1a;
-  --surface:#1c1018; --surface-2:#291720;
-  --line:#3d1d2e; --text:#fff0f5; --muted:#b89aa8;
-  --accent:#ff2e88; --accent-2:#00ffb3;
-  --buzz:#ff2e88; --ok:#00ffb3; --bad:#ff4d6a;
-  --tape:rgba(255,240,180,.55);
-  --bg-deco:radial-gradient(circle, rgba(255,46,136,.09) 1px, transparent 1.5px);
-  --bg-deco-size:12px 12px;
-}
-[data-theme="grunge"]{
-  --bg:#12100d; --bg-2:#1a1611;
-  --surface:#1f1a14; --surface-2:#2a2318;
-  --line:#3d3324; --text:#e8dfc9; --muted:#8a7d68;
-  --accent:#b8965a; --accent-2:#7a8b5c;
-  --buzz:#c44b2b; --ok:#7a8b5c; --bad:#c44b2b;
-  --tape:rgba(200,180,140,.45);
-  --bg-deco:repeating-linear-gradient(45deg, transparent 0 9px, rgba(184,150,90,.035) 9px 10px);
-  --bg-deco-size:auto;
-}
-[data-theme="synthwave"]{
-  --bg:#0a0618; --bg-2:#150a2e;
-  --surface:#1a0f33; --surface-2:#25154a;
-  --line:#3a2270; --text:#f0e8ff; --muted:#8b7aaa;
-  --accent:#ff2e97; --accent-2:#00e5ff;
-  --buzz:#ff2e97; --ok:#00e5ff; --bad:#ff4d6a;
-  --tape:rgba(0,229,255,.25);
-  --bg-deco:linear-gradient(rgba(0,229,255,.07) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(0,229,255,.07) 1px, transparent 1px);
-  --bg-deco-size:40px 40px;
-}
-[data-theme="punk"]{
-  --bg:#000; --bg-2:#0f0f0f;
-  --surface:#111; --surface-2:#1a1a1a;
-  --line:#2e2e2e; --text:#fff; --muted:#8a8a8a;
-  --accent:#ff0000; --accent-2:#fff;
-  --buzz:#ff0000; --ok:#00ff00; --bad:#ff0000;
-  --tape:rgba(255,255,255,.35);
-  --bg-deco:repeating-linear-gradient(45deg, transparent 0 14px, rgba(255,0,0,.045) 14px 16px);
-  --bg-deco-size:auto;
-}
-[data-theme="disco"]{
-  --bg:#1a0a2e; --bg-2:#2a1040;
-  --surface:#241235; --surface-2:#321a4a;
-  --line:#4a2a6a; --text:#fff5e0; --muted:#a890b8;
-  --accent:#ffd700; --accent-2:#ff6ec7;
-  --buzz:#ff6ec7; --ok:#ffd700; --bad:#ff4d6a;
-  --tape:rgba(255,215,0,.35);
-  --bg-deco:radial-gradient(circle, rgba(255,215,0,.14) 1px, transparent 1.7px);
-  --bg-deco-size:24px 24px;
-}
-[data-theme="lofi"]{
-  --bg:#1a1510; --bg-2:#221c15;
-  --surface:#262019; --surface-2:#302820;
-  --line:#453a2c; --text:#f0e6d8; --muted:#a89880;
-  --accent:#e8a87c; --accent-2:#a8c8a8;
-  --buzz:#e87c8a; --ok:#a8c8a8; --bad:#e87c8a;
-  --tape:rgba(232,168,124,.30);
-  --bg-deco:radial-gradient(circle at 20% 30%, rgba(232,168,124,.10) 0%, transparent 45%),
-            radial-gradient(circle at 80% 70%, rgba(168,200,168,.10) 0%, transparent 45%);
-  --bg-deco-size:auto;
-}
-
-/* ---------- 6 стилей: светлые ---------- */
-[data-theme="pop-punk"][data-mode="light"]{
-  --bg:#fdf5f8; --bg-2:#f5dde6;
-  --surface:#fff; --surface-2:#fbe9f0;
-  --line:#f0cdd9; --text:#1f0a14; --muted:#8a6a78;
-  --accent:#d81b60; --accent-2:#00897b;
-  --buzz:#e91e63; --ok:#00a878; --bad:#e5394f;
-  --tape:rgba(255,180,200,.7);
-  --bg-deco:radial-gradient(circle, rgba(216,27,96,.07) 1px, transparent 1.5px);
-  --bg-deco-size:12px 12px;
-}
-[data-theme="grunge"][data-mode="light"]{
-  --bg:#f2ece0; --bg-2:#e8ddc8;
-  --surface:#faf6ec; --surface-2:#f0e8d4;
-  --line:#d4c4a4; --text:#2a1f10; --muted:#7a6a4a;
-  --accent:#8a6a2a; --accent-2:#5a6a3a;
-  --buzz:#a83a1a; --ok:#5a7a3a; --bad:#a83a1a;
-  --tape:rgba(160,140,100,.5);
-  --bg-deco:repeating-linear-gradient(45deg, transparent 0 9px, rgba(138,106,42,.035) 9px 10px);
-  --bg-deco-size:auto;
-}
-[data-theme="synthwave"][data-mode="light"]{
-  --bg:#f0e8ff; --bg-2:#e0d4ff;
-  --surface:#fff; --surface-2:#f5eeff;
-  --line:#d8c8f0; --text:#1a0a2e; --muted:#6a5a8a;
-  --accent:#c2008a; --accent-2:#0088bb;
-  --buzz:#d4008a; --ok:#0088bb; --bad:#d4008a;
-  --tape:rgba(212,0,138,.2);
-  --bg-deco:linear-gradient(rgba(0,136,187,.05) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(0,136,187,.05) 1px, transparent 1px);
-  --bg-deco-size:40px 40px;
-}
-[data-theme="punk"][data-mode="light"]{
-  --bg:#fff; --bg-2:#f0f0f0;
-  --surface:#fafafa; --surface-2:#eee;
-  --line:#ddd; --text:#000; --muted:#666;
-  --accent:#d00000; --accent-2:#000;
-  --buzz:#d00000; --ok:#008800; --bad:#d00000;
-  --tape:rgba(0,0,0,.15);
-  --bg-deco:repeating-linear-gradient(45deg, transparent 0 14px, rgba(208,0,0,.03) 14px 16px);
-  --bg-deco-size:auto;
-}
-[data-theme="disco"][data-mode="light"]{
-  --bg:#fdf8e8; --bg-2:#f5e8c8;
-  --surface:#fff; --surface-2:#fdf5e0;
-  --line:#e8d8b0; --text:#2a1a3a; --muted:#8a7a8a;
-  --accent:#b89000; --accent-2:#c8308a;
-  --buzz:#c8308a; --ok:#b89000; --bad:#c8308a;
-  --tape:rgba(200,160,0,.3);
-  --bg-deco:radial-gradient(circle, rgba(200,160,0,.08) 1px, transparent 1.7px);
-  --bg-deco-size:24px 24px;
-}
-[data-theme="lofi"][data-mode="light"]{
-  --bg:#f5ede0; --bg-2:#e8dcc4;
-  --surface:#faf5ea; --surface-2:#f0e8d8;
-  --line:#d4c4a0; --text:#3a2a1a; --muted:#8a7a5a;
-  --accent:#b86840; --accent-2:#6a8a6a;
-  --buzz:#c85060; --ok:#6a8a6a; --bad:#c85060;
-  --tape:rgba(200,120,80,.25);
-  --bg-deco:radial-gradient(circle at 20% 30%, rgba(200,120,80,.06) 0%, transparent 45%),
-            radial-gradient(circle at 80% 70%, rgba(106,138,106,.06) 0%, transparent 45%);
-  --bg-deco-size:auto;
-}
-
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-html,body{height:100%;margin:0;}
-body{
-  font-family:var(--font-body); color:var(--text);
-  background-color:var(--bg);
-  background-image:
-    radial-gradient(120% 80% at 50% 0%, var(--bg-2) 0%, transparent 60%),
-    var(--bg-deco, none);
-  background-size:auto, var(--bg-deco-size, auto);
-  background-repeat:no-repeat, repeat;
-  background-attachment:fixed;
-  overscroll-behavior:none;
-  transition:background-color .3s, color .3s;
-}
-body::after{
-  content:"";position:fixed;inset:0;pointer-events:none;z-index:9999;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
-  opacity:.07;mix-blend-mode:overlay;
-}
-[data-mode="light"] body::after{opacity:.03;mix-blend-mode:multiply;}
-
-/* ============================================================
-   ЭКРАНЫ
-   ============================================================ */
-.screen{
-  position:fixed;inset:0;display:none;flex-direction:column;
-  padding:calc(env(safe-area-inset-top) + 14px) 18px calc(env(safe-area-inset-bottom) + 18px);
-  overflow-y:auto;z-index:1;
-}
-.screen.active{display:flex;animation:fade .22s ease;}
-@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-
-/* ============================================================
-   ГЛАВНЫЙ
-   ============================================================ */
-#home{justify-content:center;align-items:center;gap:20px;text-align:center;}
-.hero{display:flex;flex-direction:column;align-items:center;gap:14px;}
-.logo-mark{
-  width:100px;height:100px;border-radius:50%;position:relative;
-  background:
-    radial-gradient(circle, var(--accent) 0 14%, transparent 14.5%),
-    repeating-radial-gradient(circle, #161616 0 6px, #2a2a2a 6px 7px);
-  box-shadow:0 0 0 5px rgba(0,0,0,.55), 0 0 40px var(--accent),
-             inset 0 0 30px rgba(0,0,0,.7);
-  animation:spin 7s linear infinite;
-}
-.logo-mark::after{
-  content:"";position:absolute;top:50%;left:50%;
-  width:10px;height:10px;border-radius:50%;background:var(--bg);
-  transform:translate(-50%,-50%);box-shadow:0 0 0 2px rgba(0,0,0,.5);
-}
-@keyframes spin{to{transform:rotate(360deg);}}
-.hero-title{
-  font-family:var(--font-display);font-size:46px;font-weight:900;
-  letter-spacing:.06em;text-transform:uppercase;margin:0;line-height:.95;
-  color:var(--text);text-shadow:3px 3px 0 var(--accent), 5px 5px 0 rgba(0,0,0,.45);
-  transform:rotate(-1.5deg);
-}
-.hero-sub{margin:0;color:var(--muted);font-size:14px;letter-spacing:.04em;}
-
-.profile-card{
-  position:relative;display:flex;align-items:center;gap:14px;
-  width:100%;max-width:340px;padding:16px 18px;
-  background:var(--surface);border:2px solid var(--line);border-radius:4px;
-  transform:rotate(-1deg);box-shadow:6px 6px 0 rgba(0,0,0,.45);
-  cursor:pointer;font-family:inherit;color:var(--text);text-align:left;
-  transition:transform .12s;
-}
-.profile-card:active{transform:rotate(-1deg) scale(.97);}
-.profile-card::before{
-  content:"";position:absolute;top:-10px;left:50%;
-  transform:translateX(-50%) rotate(-2deg);
-  width:72px;height:20px;background:var(--tape);
-  border-left:1px dashed rgba(0,0,0,.15);border-right:1px dashed rgba(0,0,0,.15);
-  box-shadow:0 2px 6px rgba(0,0,0,.25);z-index:2;backdrop-filter:blur(1px);
-}
-.avatar-big{font-size:38px;line-height:1;}
-.profile-card-info{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0;}
-.profile-card-name{font-family:var(--font-display);font-size:20px;letter-spacing:.06em;
-  text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.profile-card-hint{font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;}
-
-.stack{display:flex;flex-direction:column;gap:11px;width:100%;max-width:340px;}
-.btn{
-  appearance:none;border:none;cursor:pointer;font-family:var(--font-body);
-  width:100%;padding:17px 20px;border-radius:12px;font-size:16px;font-weight:800;
-  letter-spacing:.08em;text-transform:uppercase;color:#fff;
-  transition:transform .08s, filter .15s;
-  touch-action:manipulation;user-select:none;
-  box-shadow:0 5px 0 rgba(0,0,0,.35);
-}
-.btn:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(0,0,0,.35);}
-.btn-primary{background:linear-gradient(135deg,var(--accent),color-mix(in srgb,var(--accent) 55%, #000));}
-.btn-ghost{background:var(--surface);border:2px solid var(--line);color:var(--text);}
-.btn-danger{background:linear-gradient(135deg,#ff4d6a,#c81e3e);}
-.btn-mini{
-  width:100%;padding:10px;margin-top:10px;border-radius:8px;
-  background:var(--surface-2);border:1px solid var(--line);color:var(--text);
-  font-size:12px;font-weight:800;cursor:pointer;font-family:inherit;
-  letter-spacing:.08em;text-transform:uppercase;
-}
-.btn-mini:active{background:var(--line);}
-
-.theme-strip{display:flex;gap:10px;justify-content:center;align-items:center;padding:8px 0;flex-wrap:wrap;}
-.theme-dot{
-  width:32px;height:32px;border-radius:50%;border:2px solid transparent;
-  background:linear-gradient(135deg,var(--c1) 0 50%,var(--c2) 50% 100%);
-  cursor:pointer;transition:transform .15s, border-color .15s;
-  box-shadow:0 2px 6px rgba(0,0,0,.4);
-}
-.theme-dot.active{border-color:var(--text);transform:scale(1.18);}
-.theme-dot:active{transform:scale(.92);}
-.mode-btn{
-  width:36px;height:36px;border-radius:50%;border:2px solid var(--line);
-  background:var(--surface);color:var(--text);font-size:16px;cursor:pointer;
-  display:grid;place-items:center;margin-left:4px;padding:0;
-}
-.mode-btn:active{transform:scale(.9);}
-
-/* ============================================================
-   ПРОФИЛЬ
-   ============================================================ */
-#profile .content{display:flex;flex-direction:column;gap:16px;flex:1;}
-.avatar-preview{display:flex;justify-content:center;padding:6px 0;}
-.avatar-big-display{
-  width:110px;height:110px;border-radius:50%;display:grid;place-items:center;
-  font-size:56px;line-height:1;background:var(--surface-2);
-  border:3px solid var(--accent);
-  box-shadow:0 0 0 6px rgba(0,0,0,.15), 0 0 30px color-mix(in srgb,var(--accent) 45%, transparent);
-  transition:border-color .3s, box-shadow .3s;
-}
-.avatar-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;}
-.avatar-grid button{
-  aspect-ratio:1;border:2px solid transparent;border-radius:10px;
-  background:var(--surface-2);cursor:pointer;font-size:22px;line-height:1;
-  display:grid;place-items:center;padding:0;
-  transition:transform .1s, border-color .15s, background .15s;
-}
-.avatar-grid button:active{transform:scale(.9);}
-.avatar-grid button.sel{
-  border-color:var(--accent);
-  background:color-mix(in srgb,var(--accent) 18%, var(--surface-2));
-  box-shadow:0 0 12px color-mix(in srgb,var(--accent) 50%, transparent);
-}
-@media (max-width:380px){.avatar-grid{grid-template-columns:repeat(6,1fr);}}
-.theme-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.theme-card{
-  display:flex;align-items:center;gap:10px;padding:11px 12px;
-  background:var(--surface-2);border:2px solid var(--line);border-radius:10px;
-  cursor:pointer;color:var(--text);font-family:inherit;font-size:13px;
-  font-weight:700;text-align:left;letter-spacing:.02em;
-  transition:border-color .15s, background .15s;
-}
-.theme-card.sel{
-  border-color:var(--accent);
-  background:color-mix(in srgb,var(--accent) 12%, var(--surface-2));
-}
-.theme-card .dots{display:flex;gap:3px;flex:none;}
-.theme-card .dots i{width:12px;height:12px;border-radius:50%;display:block;}
-
-/* ============================================================
-   ОБЩИЕ
-   ============================================================ */
-.bar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:16px;flex:none;}
-.bar-title{font-family:var(--font-display);font-size:16px;letter-spacing:.12em;text-transform:uppercase;}
-.room-code{font-size:12px;color:var(--muted);letter-spacing:.04em;}
-.room-code b{color:var(--text);font-size:15px;letter-spacing:.16em;font-weight:900;margin-left:3px;}
-.icon-btn{
-  width:42px;height:42px;flex:none;border-radius:10px;border:2px solid var(--line);
-  background:var(--surface);color:var(--text);font-size:17px;cursor:pointer;
-  display:grid;place-items:center;transition:background .15s, transform .08s;
-}
-.icon-btn:active{background:var(--surface-2);transform:scale(.94);}
-.content{display:flex;flex-direction:column;gap:14px;flex:1;min-height:0;}
-.panel{background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:14px;}
-.row-between{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
-.label{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-weight:800;}
-.pill{
-  min-width:26px;height:26px;padding:0 9px;border-radius:999px;display:grid;place-items:center;
-  background:var(--surface-2);border:1px solid var(--line);font-size:13px;font-weight:800;
-}
-.players{display:flex;flex-wrap:wrap;gap:7px;}
-.chip{
-  display:inline-flex;align-items:center;gap:6px;padding:5px 6px 5px 5px;border-radius:999px;
-  background:var(--surface-2);border:1px solid var(--line);font-size:14px;
-  animation:pop .25s ease;
-}
-.chip-av{
-  width:24px;height:24px;border-radius:50%;display:grid;place-items:center;
-  background:var(--line);font-size:14px;line-height:1;flex:none;
-}
-.chip-score{
-  background:var(--accent);color:#fff;padding:1px 7px;border-radius:999px;
-  font-size:11px;font-weight:900;margin-left:2px;min-width:20px;text-align:center;
-}
-@keyframes pop{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
-.muted{color:var(--muted);font-size:13px;}
-
-.input{
-  width:100%;padding:15px;border-radius:12px;border:2px solid var(--line);
-  background:var(--surface);color:var(--text);font-size:16px;font-family:inherit;
-  outline:none;transition:border-color .15s, box-shadow .15s;
-}
-.input::placeholder{color:color-mix(in srgb,var(--muted) 70%, transparent);}
-.input:focus{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 20%, transparent);}
-.field{display:flex;flex-direction:column;gap:8px;}
-
-/* ============================================================
-   ВЕДУЩИЙ
-   ============================================================ */
-.live-head{
-  display:flex;align-items:center;gap:9px;font-size:12px;font-weight:800;
-  text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:12px;
-}
-.live-dot{width:9px;height:9px;border-radius:50%;background:#3a4358;}
-.live-head.on .live-dot{background:var(--buzz);box-shadow:0 0 10px var(--buzz);animation:blink 1s infinite;}
-.live-head.on{color:var(--buzz);}
-@keyframes blink{50%{opacity:.35;}}
-.timer{margin-left:auto;font-variant-numeric:tabular-nums;color:var(--text);letter-spacing:0;}
-
-.winner-banner{
-  display:flex;align-items:center;gap:10px;padding:12px 14px;margin-bottom:10px;
-  border-radius:10px;
-  background:linear-gradient(135deg,
-    color-mix(in srgb,var(--ok) 22%, var(--surface-2)), var(--surface-2));
-  border:2px solid var(--ok);font-weight:700;font-size:14px;
-}
-.winner-banner[hidden]{display:none;}
-
-.question-show{
-  font-size:16px;line-height:1.4;padding:11px 13px;border-radius:10px;
-  background:var(--surface-2);border:1px solid var(--line);margin-bottom:12px;color:var(--text);
-}
-.question-show[hidden]{display:none;}
-
-.buzz-list{display:flex;flex-direction:column;gap:7px;}
-.buzz-item{
-  display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;
-  background:var(--surface-2);border:1px solid var(--line);
-  animation:slideIn .28s ease;position:relative;
-}
-@keyframes slideIn{from{opacity:0;transform:translateX(-12px)}to{opacity:1;transform:none;}}
-.buzz-item.correct{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 14%, var(--surface-2));}
-.buzz-item.wrong{opacity:.55;}
-.buzz-item .place{
-  width:28px;height:28px;flex:none;border-radius:50%;display:grid;place-items:center;
-  font-weight:900;font-size:12px;background:var(--line);color:var(--text);
-}
-.buzz-item:nth-child(1) .place{background:linear-gradient(135deg,#ffd76e,#ff9f1a);color:#231600;}
-.buzz-item:nth-child(2) .place{background:linear-gradient(135deg,#e6ecf5,#a9b6c9);color:#1a1f28;}
-.buzz-item:nth-child(3) .place{background:linear-gradient(135deg,#e8a274,#c07a45);color:#241505;}
-.buzz-av{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;
-  background:var(--line);font-size:16px;line-height:1;flex:none;}
-.buzz-name{flex:1;font-weight:700;font-size:15px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.buzz-time{font-variant-numeric:tabular-nums;color:var(--muted);font-size:12px;}
-.verdict-btns{display:flex;gap:5px;flex:none;}
-.verdict-btn{
-  width:30px;height:30px;border:none;border-radius:8px;cursor:pointer;
-  font-size:15px;font-weight:900;display:grid;place-items:center;
-  color:#fff;font-family:inherit;
-}
-.verdict-btn.ok{background:var(--ok);color:#031a10;}
-.verdict-btn.no{background:var(--bad);}
-.verdict-btn:active{transform:scale(.92);}
-.verdict-label{font-size:18px;font-weight:900;width:24px;text-align:center;flex:none;}
-.verdict-label.ok{color:var(--ok);}
-.verdict-label.no{color:var(--bad);}
-
-/* ============================================================
-   СТАТИСТИКА
-   ============================================================ */
-.stat-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
-.stat-block{
-  display:flex;flex-direction:column;align-items:center;gap:2px;
-  padding:14px 8px;background:var(--surface);border:2px solid var(--line);border-radius:12px;
-}
-.stat-num{font-family:var(--font-display);font-size:30px;font-weight:900;color:var(--accent);line-height:1;}
-.stat-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:800;}
-
-.stats-table{display:flex;flex-direction:column;gap:5px;}
-.stats-row{
-  display:grid;grid-template-columns:30px 1fr 48px 40px 40px;
-  align-items:center;gap:6px;padding:9px 10px;border-radius:9px;
-  background:var(--surface-2);font-size:13px;
-}
-.stats-head{background:transparent;padding:4px 10px;font-size:10px;color:var(--muted);
-  text-transform:uppercase;letter-spacing:.1em;font-weight:800;}
-.stats-rank{text-align:center;font-weight:900;color:var(--muted);}
-.stats-row:not(.stats-head):nth-child(2) .stats-rank{color:#ffd76e;}
-.stats-row:not(.stats-head):nth-child(3) .stats-rank{color:#c4d0de;}
-.stats-row:not(.stats-head):nth-child(4) .stats-rank{color:#e8a274;}
-.stats-player{display:flex;align-items:center;gap:8px;min-width:0;}
-.stats-player .avatar{font-size:18px;flex:none;line-height:1;}
-.stats-player .name{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.stats-val{text-align:center;font-weight:800;font-variant-numeric:tabular-nums;}
-.stats-val.ok{color:var(--ok);}
-.stats-val.no{color:var(--bad);}
-.stats-val.score{color:var(--accent);}
-
-/* ============================================================
-   ВХОД ИГРОКА
-   ============================================================ */
-.join-preview{
-  display:flex;align-items:center;gap:12px;padding:14px 16px;
-  background:var(--surface);border:2px dashed var(--line);border-radius:12px;
-  cursor:pointer;color:var(--text);font-family:inherit;text-align:left;width:100%;
-  transition:border-color .15s;
-}
-.join-preview:active{border-color:var(--accent);}
-.join-preview .avatar-big{font-size:32px;}
-.join-name{font-family:var(--font-display);font-size:17px;letter-spacing:.05em;text-transform:uppercase;}
-.join-hint{font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-top:2px;}
-.rooms{display:flex;flex-wrap:wrap;gap:7px;}
-.room-chip{
-  padding:9px 13px;border-radius:10px;background:var(--surface-2);
-  border:1px solid var(--line);font-size:13px;font-weight:700;cursor:pointer;
-  display:flex;align-items:center;gap:6px;transition:border-color .15s;
-}
-.room-chip:active{border-color:var(--accent);}
-.room-chip small{color:var(--muted);font-weight:500;font-size:11px;}
-
-/* ============================================================
-   ИГРОК
-   ============================================================ */
-#play .content{justify-content:center;align-items:center;gap:18px;}
-.play-who{display:flex;align-items:center;gap:9px;min-width:0;}
-.avatar-sm{
-  width:34px;height:34px;border-radius:50%;display:grid;place-items:center;
-  background:var(--surface-2);border:2px solid var(--line);font-size:18px;line-height:1;flex:none;
-}
-.play-who .name{font-family:var(--font-display);font-size:13px;letter-spacing:.06em;
-  text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:110px;}
-.play-who .room{font-size:11px;color:var(--muted);letter-spacing:.04em;}
-.play-who .room b{color:var(--text);font-weight:800;}
-.play-who .room .score{color:var(--accent);font-weight:900;font-size:13px;}
-
-.player-question{
-  text-align:center;font-size:16px;line-height:1.4;color:var(--text);
-  max-width:320px;padding:0 4px;min-height:0;
-}
-.player-question:empty{display:none;}
-.status{
-  text-align:center;font-size:13px;font-weight:800;letter-spacing:.1em;
-  text-transform:uppercase;color:var(--muted);min-height:18px;
-}
-.buzzer-wrap{position:relative;display:grid;place-items:center;}
-.buzzer-wrap.armed::before{
-  content:"";position:absolute;inset:-16px;border-radius:50%;
-  border:2px solid color-mix(in srgb,var(--buzz) 50%, transparent);
-  animation:ring 1.5s ease-out infinite;
-}
-@keyframes ring{0%{transform:scale(.94);opacity:.9}100%{transform:scale(1.2);opacity:0;}}
-.buzzer{
-  width:min(68vw,260px);height:min(68vw,260px);border-radius:50%;border:none;cursor:pointer;
-  background:
-    radial-gradient(circle at 32% 26%, rgba(255,255,255,.4) 0%, transparent 42%),
-    radial-gradient(circle at center, var(--buzz) 0%, color-mix(in srgb,var(--buzz) 55%, #000) 100%);
-  box-shadow:0 0 0 8px color-mix(in srgb,var(--buzz) 15%, transparent),
-             0 20px 55px color-mix(in srgb,var(--buzz) 45%, transparent),
-             inset 0 -10px 30px rgba(0,0,0,.4);
-  color:#fff;font-family:var(--font-display);
-  font-size:clamp(20px,7vw,30px);font-weight:900;letter-spacing:.14em;
-  touch-action:manipulation;user-select:none;
-  transition:transform .09s, filter .2s, box-shadow .3s;
-}
-.buzzer:active:not(:disabled){transform:scale(.93);}
-.buzzer:disabled{filter:grayscale(.8) brightness(.4);box-shadow:none;cursor:default;}
-.buzzer.pressed{animation:hit .4s ease;}
-@keyframes hit{0%{transform:scale(.9)}50%{transform:scale(1.05)}100%{transform:scale(1)}}
-
-.result{text-align:center;min-height:72px;display:flex;flex-direction:column;align-items:center;gap:2px;}
-.place-big{
-  font-family:var(--font-display);font-size:54px;font-weight:900;line-height:1;
-  background:linear-gradient(135deg,#ffd76e,#ff9f1a);
-  -webkit-background-clip:text;background-clip:text;color:transparent;
-  animation:pop .3s ease;
-}
-.place-big.ok{background:linear-gradient(135deg,var(--ok),color-mix(in srgb,var(--ok) 60%, #000));}
-.place-big.no{background:linear-gradient(135deg,var(--bad),color-mix(in srgb,var(--bad) 60%, #000));}
-.place-sub{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);}
-
-#host .content{overflow-y:auto;}
-@media (max-height:640px){
-  .hero-title{font-size:36px;}
-  .logo-mark{width:80px;height:80px;}
-  #home{gap:16px;}
-}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101416">
+  <title>AXEL Academy — анатомия, физиология и биомеханика</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-<!-- ============================================================
-     ГЛАВНЫЙ
-     ============================================================ -->
-<div class="screen active" id="home">
-  <div class="hero">
-    <div class="logo-mark"></div>
-    <h1 class="hero-title">БАЗЗЕР</h1>
-    <p class="hero-sub">Кто первый — тот и отвечает</p>
-  </div>
-
-  <button class="profile-card" id="profileCard">
-    <span class="avatar-big" id="homeAvatar">🎸</span>
-    <span class="profile-card-info">
-      <span class="profile-card-name" id="homeName">Игрок</span>
-      <span class="profile-card-hint">изменить профиль →</span>
-    </span>
-  </button>
-
-  <div class="stack">
-    <button class="btn btn-primary" data-go="host">Я ведущий</button>
-    <button class="btn btn-ghost" data-go="join">Я игрок</button>
-  </div>
-
-  <div class="theme-strip" id="themeStrip"></div>
+<header class="topbar">
+  <a class="brand" href="#" aria-label="AXEL Academy, главная"><span class="brand-mark">A</span><span>AXEL <b>ACADEMY</b><small>SCIENCE • MOVEMENT • RECOVERY</small></span></a>
+  <div class="top-meta"><span class="live-dot"></span> ОБУЧАЮЩАЯ ПЛАТФОРМА <span id="progressTop">0% пройдено</span></div>
+</header>
+<div class="shell">
+  <aside class="sidebar">
+    <div class="side-label">ОБУЧЕНИЕ</div>
+    <button class="nav active" data-view="home">⌂ <span>Главная</span></button>
+    <button class="nav" data-view="library">▤ <span>Библиотека</span></button>
+    <button class="nav" data-view="atlas">◎ <span>Анатомический атлас</span></button>
+    <button class="nav" data-view="quiz">✳ <span>Проверка знаний</span></button>
+    <div class="side-label second">МОЙ ПРОГРЕСС</div>
+    <div class="progress-card"><div class="progress-line"><span id="progressLabel">0% завершено</span><b id="lessonCount">0 / 5</b></div><div class="bar"><i id="progressBar"></i></div><small>Прогресс хранится в этом браузере</small></div>
+    <div class="side-note"><b>AXEL</b><p>Понимай тело. Анализируй движение. Строй восстановление на знаниях.</p></div>
+  </aside>
+  <main id="main" class="main">
+    <section class="hero">
+      <div class="eyebrow">ЗНАНИЯ • АНАТОМИЯ • ДВИЖЕНИЕ</div>
+      <h1>Изучай тело.<br><em>Понимай движение.</em></h1>
+      <p>Единая учебная среда по анатомии, физиологии, биомеханике и реабилитации.</p>
+      <button class="primary" data-open="lesson-01">Продолжить обучение <span>→</span></button>
+      <div class="hero-axel" aria-hidden="true"><div class="orb"></div><div class="axel-letter">A<span>×</span></div><div class="hero-caption">LEARN / MOVE / RECOVER</div></div>
+    </section>
+    <section class="section-head"><div><div class="eyebrow">ТВОЯ ПРОГРАММА</div><h2>Направления обучения</h2></div><button class="text-btn" data-view="library">Вся библиотека →</button></section>
+    <div class="course-grid" id="courseGrid"></div>
+    <section class="section-head modules-head"><div><div class="eyebrow">АНАТОМИЧЕСКАЯ ОСНОВА</div><h2>Учебные модули</h2></div><span class="muted">01—05</span></section>
+    <div id="moduleList" class="module-list"></div>
+    <footer>AXEL ACADEMY <span>Учебный проект • Версия 0.2</span></footer>
+  </main>
 </div>
-
-<!-- ============================================================
-     ПРОФИЛЬ
-     ============================================================ -->
-<div class="screen" id="profile">
-  <div class="bar">
-    <button class="icon-btn" id="profileBack">←</button>
-    <div class="bar-title">Профиль</div>
-    <button class="icon-btn" id="modeToggle" title="Светлая/тёмная тема">☀</button>
-  </div>
-  <div class="content">
-    <div class="avatar-preview">
-      <div class="avatar-big-display" id="profileAvatar">🎸</div>
-    </div>
-
-    <div class="field">
-      <span class="label">Имя</span>
-      <input class="input" id="nameInput" placeholder="Ваше имя" maxlength="16" autocomplete="off">
-    </div>
-
-    <div class="field">
-      <span class="label">Аватар</span>
-      <div class="avatar-grid" id="avatarGrid"></div>
-    </div>
-
-    <div class="field">
-      <span class="label">Стиль</span>
-      <div class="theme-grid" id="themeGrid"></div>
-    </div>
-
-    <button class="btn btn-primary" id="profileDone" style="margin-top:auto">Готово</button>
-  </div>
-</div>
-
-<!-- ============================================================
-     ВЕДУЩИЙ
-     ============================================================ -->
-<div class="screen" id="host">
-  <div class="bar">
-    <button class="icon-btn" id="hostBack">←</button>
-    <div class="room-code">Комната <b id="hostCode">—</b></div>
-    <button class="icon-btn" id="hostShare">⧉</button>
-  </div>
-
-  <div class="content">
-    <div class="panel">
-      <div class="row-between">
-        <span class="label">Игроки в комнате</span>
-        <span class="pill" id="hostCount">0</span>
-      </div>
-      <div class="players" id="hostPlayers"></div>
-      <button class="btn-mini" id="btnStats">📊 Статистика</button>
-    </div>
-
-    <div class="field">
-      <input class="input" id="questionInput" placeholder="Вопрос раунда (необязательно)" maxlength="120">
-    </div>
-
-    <div class="panel" id="hostLive" hidden>
-      <div class="live-head" id="liveHead">
-        <span class="live-dot"></span>
-        <span id="liveStatus">Раунд идёт</span>
-        <span class="timer" id="hostTimer">0.0с</span>
-      </div>
-      <div class="winner-banner" id="winnerBanner" hidden></div>
-      <div class="question-show" id="hostQuestion" hidden></div>
-      <div class="buzz-list" id="buzzList"></div>
-    </div>
-
-    <button class="btn btn-primary" id="btnMain">Начать раунд</button>
-  </div>
-</div>
-
-<!-- ============================================================
-     СТАТИСТИКА
-     ============================================================ -->
-<div class="screen" id="stats">
-  <div class="bar">
-    <button class="icon-btn" id="statsBack">←</button>
-    <div class="bar-title">Статистика</div>
-    <div style="width:42px"></div>
-  </div>
-  <div class="content">
-    <div class="stat-summary">
-      <div class="stat-block"><span class="stat-num" id="statRounds">0</span><span class="stat-lbl">раундов</span></div>
-      <div class="stat-block"><span class="stat-num" id="statPlayers">0</span><span class="stat-lbl">игроков</span></div>
-      <div class="stat-block"><span class="stat-num" id="statAnswers">0</span><span class="stat-lbl">ответов</span></div>
-    </div>
-    <div class="panel">
-      <div class="label" style="margin-bottom:10px">Таблица лидеров</div>
-      <div class="stats-table" id="statsTable"></div>
-    </div>
-    <button class="btn btn-ghost" id="statsReset" style="margin-top:auto">Сбросить статистику</button>
-  </div>
-</div>
-
-<!-- ============================================================
-     ВХОД ИГРОКА
-     ============================================================ -->
-<div class="screen" id="join">
-  <div class="bar">
-    <button class="icon-btn" id="joinBack">←</button>
-    <div class="bar-title">Подключение</div>
-    <div style="width:42px"></div>
-  </div>
-  <div class="content">
-    <button class="join-preview" id="joinPreview">
-      <span class="avatar-big" id="joinAvatar">🎸</span>
-      <span style="flex:1;min-width:0">
-        <div class="join-name" id="joinName">Игрок</div>
-        <div class="join-hint">войдёте под этим именем</div>
-      </span>
-      <span style="color:var(--muted);font-size:18px">→</span>
-    </button>
-    <div class="field">
-      <span class="label">Код комнаты</span>
-      <input class="input" id="roomCodeInput" placeholder="0000" inputmode="numeric" maxlength="4" autocomplete="off">
-    </div>
-    <div class="rooms" id="foundRooms"></div>
-    <button class="btn btn-primary" id="btnJoin" style="margin-top:auto">Войти в игру</button>
-  </div>
-</div>
-
-<!-- ============================================================
-     ИГРОК
-     ============================================================ -->
-<div class="screen" id="play">
-  <div class="bar">
-    <div class="play-who">
-      <span class="avatar-sm" id="playAvatar">🎸</span>
-      <div style="min-width:0">
-        <div class="name" id="playName">Игрок</div>
-        <div class="room">Комната <b id="playCode">—</b> · <b class="score" id="playScore">0</b> очк.</div>
-      </div>
-    </div>
-    <button class="icon-btn" id="playLeave">✕</button>
-  </div>
-  <div class="content">
-    <div class="player-question" id="playerQuestion"></div>
-    <div class="status" id="playerStatus">Ожидание ведущего…</div>
-    <div class="buzzer-wrap" id="buzzerWrap">
-      <button class="buzzer" id="buzzerBtn" disabled>ЖМИ</button>
-    </div>
-    <div class="result" id="playerResult"></div>
-  </div>
-</div>
-
-<script>
-/* ============================================================
-   УТИЛИТЫ
-   ============================================================ */
-const $  = (s, r = document) => r.querySelector(s);
-const $$ = (s, r = document) => [...r.querySelectorAll(s)];
-const uid = () => Math.random().toString(36).slice(2, 10);
-const esc = s => String(s).replace(/[&<>"']/g, c =>
-  ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-
-/* ============================================================
-   ПРОФИЛЬ
-   ============================================================ */
-const PROFILE_KEY = 'buzzer_profile_v2';
-const DEFAULT_PROFILE = { name: 'Игрок', avatar: '🎸', theme: 'pop-punk', mode: 'dark' };
-let profile = { ...DEFAULT_PROFILE };
-
-const AVATARS = [
-  '🎸','🥁','🎤','🎧','🎹','🎷','🎺','🎻',
-  '🪕','🪗','🔊','💀','🤘','👾','🐀','💅',
-  '🔥','⚡️','🌙','👽','🦇','🕸️','🩸','🖤'
-];
-
-const THEMES = [
-  { id:'pop-punk',  name:'Поп-панк',  colors:['#ff2e88','#00ffb3','#1c1018'] },
-  { id:'grunge',    name:'Гранж',     colors:['#b8965a','#7a8b5c','#1f1a14'] },
-  { id:'synthwave', name:'Синтвейв',  colors:['#ff2e97','#00e5ff','#1a0f33'] },
-  { id:'punk',      name:'Панк',      colors:['#ff0000','#ffffff','#111111'] },
-  { id:'disco',     name:'Диско',     colors:['#ffd700','#ff6ec7','#241235'] },
-  { id:'lofi',      name:'Лоу-фай',   colors:['#e8a87c','#a8c8a8','#262019'] }
-];
-
-const THEME_COLORS = {
-  'pop-punk':  { dark:'#0d0810', light:'#fdf5f8' },
-  'grunge':    { dark:'#12100d', light:'#f2ece0' },
-  'synthwave': { dark:'#0a0618', light:'#f0e8ff' },
-  'punk':      { dark:'#000000', light:'#ffffff' },
-  'disco':     { dark:'#1a0a2e', light:'#fdf8e8' },
-  'lofi':      { dark:'#1a1510', light:'#f5ede0' }
-};
-
-function loadProfile(){
-  try {
-    const raw = localStorage.getItem(PROFILE_KEY);
-    if (raw) profile = { ...DEFAULT_PROFILE, ...JSON.parse(raw) };
-  } catch(_) {}
-  applyVisual();
-  applyProfileToUI();
-}
-function saveProfile(){
-  try { localStorage.setItem(PROFILE_KEY, JSON.stringify(profile)); } catch(_) {}
-}
-
-function applyVisual(){
-  document.documentElement.setAttribute('data-theme', profile.theme);
-  document.documentElement.setAttribute('data-mode', profile.mode);
-  const meta = document.querySelector('meta[name="theme-color"]');
-  if (meta) {
-    const c = THEME_COLORS[profile.theme] || THEME_COLORS['pop-punk'];
-    meta.content = c[profile.mode] || c.dark;
-  }
-}
-function setTheme(theme){ profile.theme = theme; saveProfile(); applyVisual(); updateThemeUI(); beep(880, .04, 'sine', .08); }
-function setMode(mode){ profile.mode = mode; saveProfile(); applyVisual(); updateModeUI(); beep(660, .05, 'sine', .08); }
-function toggleMode(){ setMode(profile.mode === 'light' ? 'dark' : 'light'); }
-
-function applyProfileToUI(){
-  $('#homeAvatar').textContent = profile.avatar;
-  $('#homeName').textContent = profile.name;
-  $('#profileAvatar').textContent = profile.avatar;
-  $('#nameInput').value = profile.name;
-  $('#joinAvatar').textContent = profile.avatar;
-  $('#joinName').textContent = profile.name;
-  $('#playAvatar').textContent = profile.avatar;
-  $('#playName').textContent = profile.name;
-  $$('#avatarGrid button').forEach(b => b.classList.toggle('sel', b.dataset.av === profile.avatar));
-  updateThemeUI();
-  updateModeUI();
-}
-function updateThemeUI(){
-  $$('.theme-dot').forEach(d => d.classList.toggle('active', d.dataset.theme === profile.theme));
-  $$('.theme-card').forEach(c => c.classList.toggle('sel', c.dataset.theme === profile.theme));
-}
-function updateModeUI(){
-  const icon = profile.mode === 'light' ? '🌙' : '☀';
-  const t = $('#modeToggle'); if (t) t.textContent = icon;
-  const f = $('#modeFloat'); if (f) f.textContent = icon;
-}
-
-/* --- UI профиля --- */
-function buildProfileUI(){
-  const ag = $('#avatarGrid');
-  ag.innerHTML = AVATARS.map(a => `<button data-av="${a}" type="button">${a}</button>`).join('');
-  ag.addEventListener('click', e => {
-    const b = e.target.closest('button[data-av]');
-    if (!b) return;
-    profile.avatar = b.dataset.av;
-    saveProfile(); applyProfileToUI();
-    beep(1100, .03, 'sine', .1);
-  });
-
-  const tg = $('#themeGrid');
-  tg.innerHTML = THEMES.map(t => `
-    <button class="theme-card" data-theme="${t.id}" type="button">
-      <span class="dots">${t.colors.map(c => `<i style="background:${c}"></i>`).join('')}</span>
-      <span>${t.name}</span>
-    </button>`).join('');
-  tg.addEventListener('click', e => {
-    const c = e.target.closest('.theme-card');
-    if (c) setTheme(c.dataset.theme);
-  });
-
-  const ts = $('#themeStrip');
-  ts.innerHTML = THEMES.map(t => `
-    <button class="theme-dot" data-theme="${t.id}" type="button"
-      style="--c1:${t.colors[0]};--c2:${t.colors[1]}" title="${t.name}"></button>`).join('');
-  ts.addEventListener('click', e => {
-    const d = e.target.closest('.theme-dot');
-    if (d) setTheme(d.dataset.theme);
-  });
-
-  $('#nameInput').addEventListener('input', e => {
-    profile.name = e.target.value.trim() || 'Игрок';
-    saveProfile(); applyProfileToUI();
-  });
-
-  $('#modeToggle').addEventListener('click', toggleMode);
-}
-
-/* ============================================================
-   ШИНА
-   ============================================================ */
-const bus = (() => {
-  if ('BroadcastChannel' in window) {
-    const ch = new BroadcastChannel('buzzer-proto-v1');
-    const hs = [];
-    ch.onmessage = e => hs.forEach(h => h(e.data));
-    return { send: m => ch.postMessage(m), on: f => hs.push(f) };
-  }
-  const hs = [];
-  window.addEventListener('storage', e => {
-    if (e.key === 'bz_msg' && e.newValue) {
-      try { const m = JSON.parse(e.newValue); hs.forEach(h => h(m)); } catch(_) {}
-    }
-  });
-  return {
-    send: m => localStorage.setItem('bz_msg', JSON.stringify({ ...m, _r: Math.random() })),
-    on: f => hs.push(f)
-  };
-})();
-
-/* ============================================================
-   ЗВУК
-   ============================================================ */
-let actx = null;
-function beep(freq = 880, dur = .07, type = 'sine', vol = .18){
-  try {
-    actx = actx || new (window.AudioContext || window.webkitAudioContext)();
-    const t = actx.currentTime;
-    const o = actx.createOscillator(), g = actx.createGain();
-    o.type = type; o.frequency.value = freq;
-    g.gain.setValueAtTime(.0001, t);
-    g.gain.exponentialRampToValueAtTime(vol, t + .008);
-    g.gain.exponentialRampToValueAtTime(.0001, t + dur);
-    o.connect(g); g.connect(actx.destination);
-    o.start(t); o.stop(t + dur + .03);
-  } catch(_) {}
-}
-
-/* ============================================================
-   НАВИГАЦИЯ
-   ============================================================ */
-function show(id){ $$('.screen').forEach(s => s.classList.toggle('active', s.id === id)); }
-
-/* ============================================================
-   ВЕДУЩИЙ
-   ============================================================ */
-const host = {
-  code: null,
-  players: [],     // {id, name, avatar, score, correct, wrong}
-  round: null,
-  roundsPlayed: 0,
-  timer: null
-};
-
-function startHost(){
-  if (!host.code) {
-    host.code = String(Math.floor(1000 + Math.random() * 9000));
-    host.players = [];
-    host.round = null;
-    host.roundsPlayed = 0;
-    $('#hostCode').textContent = host.code;
-    $('#questionInput').value = '';
-    $('#hostQuestion').hidden = true;
-    renderHostPlayers();
-    renderHostRound();
-    startAnnounce();
-  }
-}
-function hostBroadcast(){
-  bus.send({
-    type:'state', code: host.code,
-    players: host.players,
-    roundsPlayed: host.roundsPlayed,
-    round: host.round ? {
-      id: host.round.id, question: host.round.question,
-      active: host.round.active, buzzes: host.round.buzzes
-    } : null
-  });
-}
-function startAnnounce(){
-  setInterval(() => {
-    if (host.code) bus.send({ type:'announce', code: host.code, count: host.players.length });
-  }, 1200);
-}
-
-function renderHostPlayers(){
-  $('#hostCount').textContent = host.players.length;
-  $('#hostPlayers').innerHTML = host.players.length
-    ? host.players.map(p => `
-        <span class="chip">
-          <span class="chip-av">${esc(p.avatar || '🎸')}</span>
-          ${esc(p.name)}
-          <b class="chip-score">${p.score || 0}</b>
-        </span>`).join('')
-    : '<span class="muted">Никто не подключился…</span>';
-}
-
-function renderHostRound(){
-  const r = host.round;
-  const live = $('#hostLive');
-
-  if (!r) {
-    live.hidden = true;
-    $('#btnMain').textContent = 'Начать раунд';
-    $('#btnMain').className = 'btn btn-primary';
-    return;
-  }
-
-  live.hidden = false;
-  const head = $('#liveHead');
-  head.classList.toggle('on', r.active);
-  $('#liveStatus').textContent = r.active ? 'Раунд идёт' : 'Раунд завершён';
-
-  const q = $('#hostQuestion');
-  if (r.question) { q.textContent = r.question; q.hidden = false; } else q.hidden = true;
-
-  $('#btnMain').textContent = r.active ? 'Завершить раунд' : 'Начать новый раунд';
-  $('#btnMain').className = r.active ? 'btn btn-danger' : 'btn btn-primary';
-
-  renderWinnerBanner();
-  renderBuzzList();
-  if (!r.active) $('#hostTimer').textContent = '';
-}
-
-function renderWinnerBanner(){
-  const banner = $('#winnerBanner');
-  if (!host.round || host.round.active) { banner.hidden = true; return; }
-  const w = host.round.buzzes.find(b => b.verdict === 'correct');
-  if (!w) { banner.hidden = true; return; }
-  banner.hidden = false;
-  banner.innerHTML = `<span style="font-size:20px">🏆</span>
-    <span>${esc(w.name)} — правильно! +1 очко</span>`;
-}
-
-function renderBuzzList(){
-  const list = $('#buzzList');
-  if (!host.round || !host.round.buzzes.length) {
-    list.innerHTML = '<div class="muted">Пока никто не нажал…</div>';
-    return;
-  }
-  const active = host.round.active;
-  list.innerHTML = host.round.buzzes.map((b, i) => {
-    const cls = b.verdict === 'correct' ? 'correct' : b.verdict === 'wrong' ? 'wrong' : '';
-    const showBtns = active && !b.verdict;
-    return `
-    <div class="buzz-item ${cls}">
-      <span class="place">${i + 1}</span>
-      <span class="buzz-av">${esc(b.avatar || '🎸')}</span>
-      <span class="buzz-name">${esc(b.name)}</span>
-      <span class="buzz-time">${(b.ms / 1000).toFixed(2)} с</span>
-      ${showBtns ? `
-        <div class="verdict-btns">
-          <button class="verdict-btn ok" data-correct="${b.playerId}" title="Правильно">✓</button>
-          <button class="verdict-btn no" data-wrong="${b.playerId}" title="Неправильно">✗</button>
-        </div>` : ''}
-      ${b.verdict === 'correct' ? '<span class="verdict-label ok">✓</span>' : ''}
-      ${b.verdict === 'wrong'   ? '<span class="verdict-label no">✗</span>' : ''}
-    </div>`;
-  }).join('');
-
-  $$('.verdict-btn.ok', list).forEach(btn => {
-    btn.addEventListener('click', () => markBuzz(btn.dataset.correct, 'correct'));
-  });
-  $$('.verdict-btn.no', list).forEach(btn => {
-    btn.addEventListener('click', () => markBuzz(btn.dataset.wrong, 'wrong'));
-  });
-}
-
-function markBuzz(playerId, verdict){
-  if (!host.round || !host.round.active) return;
-  const buzz = host.round.buzzes.find(b => b.playerId === playerId);
-  if (!buzz || buzz.verdict) return;
-
-  buzz.verdict = verdict;
-  const p = host.players.find(x => x.id === playerId);
-  if (p) {
-    if (verdict === 'correct') { p.score = (p.score || 0) + 1; p.correct = (p.correct || 0) + 1; }
-    else { p.wrong = (p.wrong || 0) + 1; }
-  }
-
-  if (verdict === 'correct') {
-    host.round.active = false;
-    host.roundsPlayed++;
-    stopTimer();
-    beep(880, .12, 'sine', .2);
-    setTimeout(() => beep(1320, .15, 'sine', .18), 120);
-    setTimeout(() => beep(1760, .18, 'sine', .15), 260);
-  } else {
-    beep(280, .15, 'square', .15);
-  }
-
-  renderHostRound();
-  renderHostPlayers();
-  hostBroadcast();
-}
-
-function startTimer(){
-  stopTimer();
-  host.timer = setInterval(() => {
-    if (!host.round || !host.round.active) return;
-    $('#hostTimer').textContent = ((Date.now() - host.round.startAt) / 1000).toFixed(1) + 'с';
-  }, 100);
-}
-function stopTimer(){ clearInterval(host.timer); host.timer = null; }
-
-function startRound(){
-  host.round = {
-    id: uid(), question: $('#questionInput').value.trim(),
-    startAt: Date.now(), active: true, buzzes: []
-  };
-  $('#hostTimer').textContent = '0.0с';
-  renderHostRound();
-  hostBroadcast();
-  startTimer();
-  beep(660, .1, 'sine', .14);
-}
-function stopRound(){
-  if (!host.round) return;
-  if (host.round.active) host.roundsPlayed++;
-  host.round.active = false;
-  stopTimer();
-  renderHostRound();
-  hostBroadcast();
-  beep(320, .16, 'sine', .14);
-}
-
-$('#btnMain').addEventListener('click', () => {
-  if (host.round && host.round.active) stopRound();
-  else startRound();
-});
-
-/* ============================================================
-   СТАТИСТИКА
-   ============================================================ */
-function renderStats(){
-  const players = host.players || [];
-  const rounds = host.roundsPlayed || 0;
-  const totalCorrect = players.reduce((s, p) => s + (p.correct || 0), 0);
-  const totalWrong   = players.reduce((s, p) => s + (p.wrong || 0), 0);
-
-  $('#statRounds').textContent = rounds;
-  $('#statPlayers').textContent = players.length;
-  $('#statAnswers').textContent = totalCorrect + totalWrong;
-
-  const sorted = [...players].sort((a, b) => (b.score || 0) - (a.score || 0));
-  const table = $('#statsTable');
-  if (!sorted.length) {
-    table.innerHTML = '<div class="muted">Пока нет игроков</div>';
-    return;
-  }
-  table.innerHTML = `
-    <div class="stats-row stats-head">
-      <div class="stats-rank">#</div>
-      <div>Игрок</div>
-      <div class="stats-val">Очки</div>
-      <div class="stats-val">✓</div>
-      <div class="stats-val">✗</div>
-    </div>
-    ${sorted.map((p, i) => `
-      <div class="stats-row">
-        <div class="stats-rank">${i + 1}</div>
-        <div class="stats-player">
-          <span class="avatar">${esc(p.avatar || '🎸')}</span>
-          <span class="name">${esc(p.name)}</span>
-        </div>
-        <div class="stats-val score">${p.score || 0}</div>
-        <div class="stats-val ok">${p.correct || 0}</div>
-        <div class="stats-val no">${p.wrong || 0}</div>
-      </div>`).join('')}`;
-}
-
-$('#btnStats').addEventListener('click', () => { renderStats(); show('stats'); });
-$('#statsBack').addEventListener('click', () => show('host'));
-$('#statsReset').addEventListener('click', () => {
-  host.roundsPlayed = 0;
-  host.players.forEach(p => { p.score = 0; p.correct = 0; p.wrong = 0; });
-  renderHostPlayers();
-  renderStats();
-  hostBroadcast();
-  beep(400, .1, 'square', .12);
-});
-
-/* ============================================================
-   ИГРОК
-   ============================================================ */
-const me = { id: uid(), code: null, roundId: null, buzzed: false };
-const foundRooms = new Map();
-
-function renderFoundRooms(){
-  const now = Date.now();
-  const items = [...foundRooms.entries()]
-    .filter(([, v]) => now - v.ts < 5000)
-    .sort((a, b) => b[1].ts - a[1].ts);
-  const box = $('#foundRooms');
-  box.innerHTML = items.length
-    ? items.map(([code, v]) =>
-        `<div class="room-chip" data-code="${code}">Комната ${code} <small>${v.count} 👤</small></div>`
-      ).join('')
-    : '<span class="muted">Ищем комнаты рядом…</span>';
-  $$('.room-chip', box).forEach(el => {
-    el.addEventListener('click', () => {
-      $('#roomCodeInput').value = el.dataset.code;
-      beep(900, .04, 'sine', .1);
-    });
-  });
-}
-setInterval(() => {
-  if ($('#join').classList.contains('active')) renderFoundRooms();
-}, 1000);
-
-function applyPlayerState(s){
-  const r = s.round;
-  const btn = $('#buzzerBtn');
-  const wrap = $('#buzzerWrap');
-  const status = $('#playerStatus');
-  const result = $('#playerResult');
-  const qEl = $('#playerQuestion');
-
-  // обновляем счёт
-  const meData = (s.players || []).find(p => p.id === me.id);
-  if (meData) $('#playScore').textContent = meData.score || 0;
-
-  if (r && r.id !== me.roundId) { me.roundId = r.id; me.buzzed = false; }
-  if (!r) { me.roundId = null; me.buzzed = false; }
-
-  const myBuzz = r ? r.buzzes.find(b => b.playerId === me.id) : null;
-  const myVerdict = myBuzz ? myBuzz.verdict : null;
-  const myIdx = r ? r.buzzes.findIndex(b => b.playerId === me.id) : -1;
-  const place = myIdx >= 0 ? myIdx + 1 : 0;
-
-  qEl.textContent = (r && r.active && r.question) ? r.question : '';
-
-  if (r && r.active) {
-    if (myVerdict === 'correct') {
-      status.textContent = 'Правильно!';
-      result.innerHTML = `<div class="place-big ok">✓</div><div class="place-sub">+1 очко</div>`;
-      btn.disabled = true; wrap.classList.remove('armed'); btn.classList.add('pressed');
-    } else if (myVerdict === 'wrong') {
-      status.textContent = 'Неверно';
-      result.innerHTML = `<div class="place-big no">✗</div><div class="place-sub">вы ответили неверно</div>`;
-      btn.disabled = true; wrap.classList.remove('armed');
-    } else if (me.buzzed) {
-      status.textContent = 'Нажато! Ждём…';
-      btn.disabled = true; wrap.classList.remove('armed');
-    } else {
-      status.textContent = 'Жми кнопку!';
-      result.innerHTML = '';
-      btn.disabled = false; btn.classList.remove('pressed');
-      wrap.classList.add('armed');
-    }
-  } else if (r) {
-    btn.disabled = true; wrap.classList.remove('armed');
-    status.textContent = 'Раунд завершён';
-    if (myVerdict === 'correct') {
-      result.innerHTML = `<div class="place-big ok">✓</div><div class="place-sub">+1 очко</div>`;
-    } else if (myVerdict === 'wrong') {
-      result.innerHTML = `<div class="place-big no">✗</div><div class="place-sub">вы ответили неверно</div>`;
-    } else if (place) {
-      result.innerHTML = `<div class="place-big">${place}</div><div class="place-sub">ваша позиция</div>`;
-    } else {
-      result.innerHTML = '';
-    }
-  } else {
-    status.textContent = 'Ожидание ведущего…';
-    btn.disabled = true; wrap.classList.remove('armed'); btn.classList.remove('pressed');
-    result.innerHTML = ''; qEl.textContent = '';
-  }
-}
-
-$('#buzzerBtn').addEventListener('click', () => {
-  const btn = $('#buzzerBtn');
-  if (!me.code || btn.disabled) return;
-  btn.disabled = true;
-  me.buzzed = true;
-  navigator.vibrate?.(60);
-  beep(1200, .05, 'square', .2);
-  bus.send({ type:'buzz', code: me.code, playerId: me.id });
-  $('#playerStatus').textContent = 'Нажато! Ждём…';
-  $('#buzzerWrap').classList.remove('armed');
-});
-
-$('#btnJoin').addEventListener('click', () => {
-  const code = $('#roomCodeInput').value.trim();
-  if (!/^\d{4}$/.test(code)) {
-    $('#roomCodeInput').focus();
-    beep(200, .15, 'square', .12);
-    return;
-  }
-  me.code = code; me.roundId = null; me.buzzed = false;
-  $('#playCode').textContent = code;
-  $('#playScore').textContent = '0';
-  $('#playerStatus').textContent = 'Ожидание ведущего…';
-  $('#playerResult').innerHTML = '';
-  $('#playerQuestion').textContent = '';
-  $('#buzzerBtn').disabled = true;
-  $('#buzzerWrap').classList.remove('armed');
-  applyProfileToUI();
-  show('play');
-  bus.send({ type:'join', code, player: { id: me.id, name: profile.name, avatar: profile.avatar } });
-  bus.send({ type:'hello', code });
-  beep(880, .06, 'sine', .15);
-});
-
-function leaveRoom(){
-  if (me.code) bus.send({ type:'leave', code: me.code, playerId: me.id });
-  me.code = null; me.roundId = null; me.buzzed = false;
-  show('home');
-}
-$('#playLeave').addEventListener('click', leaveRoom);
-window.addEventListener('beforeunload', () => {
-  if (me.code) bus.send({ type:'leave', code: me.code, playerId: me.id });
-});
-
-/* ============================================================
-   МАРШРУТИЗАТОР
-   ============================================================ */
-bus.on(msg => {
-  /* ---------- ВЕДУЩИЙ ---------- */
-  if (host.code && msg.code === host.code) {
-    if (msg.type === 'join' && msg.player) {
-      if (!host.players.some(p => p.id === msg.player.id)) {
-        host.players.push({
-          id: msg.player.id, name: msg.player.name,
-          avatar: msg.player.avatar || '🎸',
-          score: 0, correct: 0, wrong: 0
-        });
-        renderHostPlayers();
-        beep(1040, .05, 'sine', .12);
-      }
-      hostBroadcast();
-      return;
-    }
-    if (msg.type === 'hello') { hostBroadcast(); return; }
-    if (msg.type === 'leave') {
-      host.players = host.players.filter(p => p.id !== msg.playerId);
-      renderHostPlayers();
-      hostBroadcast();
-      return;
-    }
-    if (msg.type === 'buzz') {
-      if (!host.round || !host.round.active) return;
-      if (host.round.buzzes.some(b => b.playerId === msg.playerId)) return;
-      const p = host.players.find(x => x.id === msg.playerId);
-      host.round.buzzes.push({
-        playerId: msg.playerId,
-        name: p ? p.name : '???',
-        avatar: p ? p.avatar : '🎸',
-        ms: Date.now() - host.round.startAt,
-        verdict: null
-      });
-      renderBuzzList();
-      hostBroadcast();
-      beep(980, .07, 'square', .16);
-      navigator.vibrate?.(35);
-      return;
-    }
-  }
-
-  /* ---------- ИГРОК ---------- */
-  if (me.code && msg.code === me.code) {
-    if (msg.type === 'state') applyPlayerState(msg);
-    return;
-  }
-
-  /* ---------- ПОИСК ---------- */
-  if (msg.type === 'announce') {
-    foundRooms.set(msg.code, { count: msg.count, ts: Date.now() });
-  }
-});
-
-/* ============================================================
-   НАВИГАЦИЯ
-   ============================================================ */
-$$('[data-go]').forEach(b => b.addEventListener('click', () => {
-  const go = b.dataset.go;
-  if (go === 'host') { startHost(); show('host'); }
-  if (go === 'join') { renderFoundRooms(); applyProfileToUI(); show('join'); }
-}));
-
-$('#profileCard').addEventListener('click', () => { applyProfileToUI(); show('profile'); });
-$('#profileBack').addEventListener('click', () => show('home'));
-$('#profileDone').addEventListener('click', () => show('home'));
-$('#joinPreview').addEventListener('click', () => { applyProfileToUI(); show('profile'); });
-
-$('#hostBack').addEventListener('click', () => {
-  stopTimer();
-  if (host.code) bus.send({ type:'state', code: host.code, players: [], round: null });
-  host.code = null; host.round = null; host.players = []; host.roundsPlayed = 0;
-  show('home');
-});
-$('#joinBack').addEventListener('click', () => show('home'));
-
-$('#hostShare').addEventListener('click', async () => {
-  if (!host.code) return;
-  try {
-    await navigator.clipboard.writeText(host.code);
-    $('#hostShare').textContent = '✓';
-    setTimeout(() => $('#hostShare').textContent = '⧉', 1200);
-  } catch(_) {}
-});
-
-/* ============================================================
-   СТАРТ
-   ============================================================ */
-buildProfileUI();
-loadProfile();
-</script>
+<script src="app.js"></script>
 </body>
 </html>
+
+
+ФАЙЛ: styles.css (CSS)
+==============================================================================
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Oswald:wght@500;600;700&display=swap');
+:root{--bg:#101416;--panel:#171e20;--panel2:#1c2527;--line:#2a3537;--text:#eef2ef;--muted:#8c9a98;--lime:#c6f36b;--cyan:#80d8d0}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Manrope,Arial,sans-serif;font-size:14px}.topbar{height:76px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 4.5%;position:sticky;top:0;background:#101416ed;backdrop-filter:blur(12px);z-index:5}.brand{display:flex;gap:12px;align-items:center;color:var(--text);text-decoration:none;font-family:Oswald,sans-serif;font-size:20px;letter-spacing:1px}.brand b{color:var(--lime);font-weight:600}.brand small{display:block;font:8px Manrope;letter-spacing:2px;color:var(--muted);margin-top:3px}.brand-mark{display:grid;place-items:center;width:39px;height:39px;border:1px solid var(--lime);color:var(--lime);font:700 25px Oswald;transform:skew(-7deg)}.top-meta{display:flex;gap:10px;align-items:center;color:var(--muted);font-size:9px;letter-spacing:1.5px}.top-meta span:last-child{margin-left:20px;color:var(--lime)}.live-dot{width:7px;height:7px;border-radius:50%;background:var(--lime);box-shadow:0 0 12px #c6f36b88}.shell{display:grid;grid-template-columns:238px minmax(0,1fr);max-width:1500px;margin:auto}.sidebar{border-right:1px solid var(--line);min-height:calc(100vh - 76px);padding:32px 20px;position:sticky;top:76px;height:calc(100vh - 76px)}.side-label,.eyebrow{font-size:9px;letter-spacing:2px;color:var(--lime);font-weight:800}.nav{width:100%;background:none;border:0;color:#aab5b2;padding:13px 12px;text-align:left;display:flex;gap:13px;align-items:center;border-radius:7px;margin-top:7px;font:500 12px Manrope;cursor:pointer}.nav:hover,.nav.active{background:#27312d;color:var(--lime)}.nav:first-letter{font-size:18px}.second{margin-top:38px}.progress-card{margin-top:15px;padding:14px;background:var(--panel);border:1px solid var(--line);border-radius:8px}.progress-line{display:flex;justify-content:space-between;font-size:10px}.progress-line b{color:var(--lime)}.bar{height:4px;background:#303b3c;margin:13px 0 9px;border-radius:4px;overflow:hidden}.bar i{display:block;height:100%;width:0;background:var(--lime);transition:width .3s}.progress-card small{font-size:9px;color:var(--muted)}.side-note{position:absolute;bottom:32px;left:20px;right:20px;border-top:1px solid var(--line);padding-top:17px}.side-note b{font:600 17px Oswald;color:var(--lime);letter-spacing:2px}.side-note p{color:var(--muted);font-size:10px;line-height:1.7}.main{padding:38px clamp(22px,5vw,72px);min-width:0}.hero{min-height:330px;background:linear-gradient(110deg,#202b2a,#17201f 62%,#273432);border:1px solid #34403d;border-radius:12px;padding:43px 48px;position:relative;overflow:hidden}.hero h1{font:600 clamp(35px,4.5vw,58px)/1.08 Oswald;margin:20px 0 13px;letter-spacing:.3px}.hero h1 em{font-style:normal;color:var(--lime)}.hero p{max-width:450px;color:#aab7b2;line-height:1.8;font-size:12px}.primary{background:var(--lime);border:0;border-radius:5px;padding:13px 18px;margin-top:16px;font:800 11px Manrope;cursor:pointer;color:#15201a}.primary span{font-size:17px;margin-left:18px}.hero-axel{position:absolute;right:7%;top:25px;width:260px;height:270px;display:grid;place-items:center;opacity:.9}.orb{position:absolute;width:230px;height:230px;border:1px solid #a6d76c55;border-radius:50%;box-shadow:0 0 70px #b5ef4c12,inset 0 0 50px #b5ef4c0a}.orb:before,.orb:after{content:"";position:absolute;inset:18px;border:1px solid #a6d76c33;border-radius:50%}.orb:after{inset:42px;border-style:dashed}.axel-letter{font:700 170px Oswald;color:#c6f36b;transform:skew(-8deg);text-shadow:0 0 50px #c6f36655}.axel-letter span{font-size:45px;color:#e9f3dc;vertical-align:top}.hero-caption{position:absolute;bottom:0;font-size:8px;letter-spacing:3px;color:#8d9e91}.section-head{display:flex;justify-content:space-between;align-items:end;margin:42px 0 17px}.section-head h2{font:600 25px Oswald;margin:8px 0 0}.text-btn{border:0;background:none;color:var(--lime);font:600 10px Manrope;cursor:pointer}.course-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.course{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:18px;min-height:142px;cursor:pointer;transition:.2s}.course:hover,.module:hover{border-color:#8aa65d;transform:translateY(-2px)}.course .symbol{font-size:22px;color:var(--lime)}.course h3{font-size:12px;margin:13px 0 6px}.course p{font-size:10px;color:var(--muted);line-height:1.6;margin:0}.modules-head{margin-top:42px}.module-list{display:grid;gap:8px}.module{display:flex;align-items:center;gap:17px;padding:15px 17px;background:var(--panel);border:1px solid var(--line);border-radius:7px;cursor:pointer;transition:.2s}.module-num{font:600 23px Oswald;color:#718078;width:36px}.module-info{flex:1}.module-info b{font-size:12px}.module-info small{display:block;color:var(--muted);font-size:10px;margin-top:5px}.status{font-size:9px;color:var(--muted);letter-spacing:1px}.status.done{color:var(--lime)}footer{border-top:1px solid var(--line);margin-top:45px;padding:20px 0;color:#6d7a77;font:10px Oswald;letter-spacing:2px;display:flex;justify-content:space-between}footer span{font:9px Manrope;letter-spacing:0}
+.content-page{max-width:900px}.back{background:none;border:0;color:var(--lime);cursor:pointer;padding:0 0 20px;font:600 11px Manrope}.content-page h1{font:600 38px Oswald;margin:10px 0}.lead{color:#a9b5b0;line-height:1.8;max-width:750px}.lesson-card{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:24px;margin:18px 0}.lesson-card h3{font:600 19px Oswald;margin:0 0 13px}.lesson-card p,.lesson-card li{font-size:12px;line-height:1.85;color:#bdc7c2}.lesson-card strong{color:var(--lime)}.term{display:inline-block;background:#29352e;color:var(--lime);padding:4px 7px;border-radius:3px;font-size:10px;margin:3px}.callout{border-left:3px solid var(--lime);padding:12px 15px;background:#202a26;color:#c4d0c8;font-size:11px;line-height:1.7;margin-top:16px}.lesson-actions{display:flex;gap:10px;flex-wrap:wrap;margin:22px 0}.secondary{background:transparent;border:1px solid var(--line);color:var(--text);border-radius:5px;padding:12px 16px;cursor:pointer;font:600 11px Manrope}.secondary:hover{border-color:var(--lime)}.quiz-option{display:block;width:100%;text-align:left;padding:14px;margin:9px 0;background:#20292a;border:1px solid var(--line);border-radius:6px;color:var(--text);cursor:pointer}.quiz-option:hover{border-color:var(--lime)}.quiz-option.selected{border-color:var(--lime);background:#29372d}.feedback{padding:14px;background:#202a26;border-radius:6px;color:#d4e0d8;line-height:1.7;font-size:12px;margin-top:12px}.search{width:100%;max-width:460px;padding:13px 15px;background:var(--panel);border:1px solid var(--line);border-radius:6px;color:var(--text);margin:15px 0 22px;font:12px Manrope}.empty{color:var(--muted);padding:20px}
+@media(max-width:850px){.shell{grid-template-columns:1fr}.sidebar{position:relative;top:auto;height:auto;min-height:0;border-right:0;border-bottom:1px solid var(--line);padding:12px 18px;display:flex;gap:5px;overflow-x:auto}.side-label,.progress-card,.side-note{display:none}.nav{white-space:nowrap;width:auto;margin:0;padding:10px;font-size:10px}.main{padding:24px 18px}.hero{padding:30px 25px;min-height:300px}.hero-axel{right:-70px;opacity:.23}.course-grid{grid-template-columns:repeat(2,1fr)}.top-meta{font-size:0}.top-meta span:last-child{font-size:9px;margin:0}.modules-head{margin-top:32px}}
+@media(max-width:480px){.course-grid{grid-template-columns:1fr 1fr;gap:8px}.course{padding:13px;min-height:150px}.hero h1{font-size:39px}.hero p{max-width:290px}.module{gap:10px;padding:13px}.status{font-size:8px}.topbar{padding:0 16px}}
+
+
+
+ФАЙЛ: app.js (JavaScript)
+==============================================================================
+const modules=[
+{id:"01",title:"Остеология — скелетная система",sub:"Кости, ориентиры, классификация и функции",lesson:"lesson-01"},
+{id:"02",title:"Позвоночник",sub:"Позвонки, диски, связки и движения позвоночного столба",lesson:"lesson-02"},
+{id:"03",title:"Плечевой пояс и верхняя конечность",sub:"Плечевой комплекс, суставы и вращательная манжета",lesson:"lesson-03"},
+{id:"04",title:"Таз и нижняя конечность",sub:"Тазобедренный сустав, колено, голеностоп и стопа",lesson:"lesson-04"},
+{id:"05",title:"Центральная нервная система и нейромышечный контроль",sub:"Мозг, спинной мозг, моторные единицы и проприоцепция",lesson:"lesson-05"}
+];
+const courses=[["⌘","Анатомия человека","Строение тела и взаимосвязи структур","lesson-01"],["◉","Физиология","Как работают системы организма","lesson-05"],["↗","Биомеханика","Законы движения и суставная кинематика","lesson-03"],["✚","Реабилитация","Функция, оценка и восстановление","lesson-04"]];
+const lessons={
+"lesson-01":{title:"Остеология: скелетная система",tag:"МОДУЛЬ 01 • АНАТОМИЯ",lead:"Скелет — динамическая опорная система, которая обеспечивает защиту органов, передачу нагрузок, движение и участие в минеральном обмене.",sections:[
+["Функции скелета",`<ul><li><strong>Опора:</strong> формирует каркас тела и точки прикрепления мягких тканей.</li><li><strong>Защита:</strong> череп, грудная клетка и позвоночный канал защищают жизненно важные структуры.</li><li><strong>Движение:</strong> кости работают как рычаги, суставы — как сочленения, мышцы создают усилие.</li><li><strong>Гомеостаз:</strong> костная ткань участвует в обмене кальция и фосфата; красный костный мозг — в кроветворении.</li></ul>`],
+["Подсчёт костей",`У взрослого человека в стандартной анатомической схеме обычно насчитывают <strong>206 костей</strong>: 80 в осевом скелете и 126 в добавочном. Возможны индивидуальные варианты, например дополнительные сесамовидные кости или различия в числе копчиковых сегментов.`],
+["Классификация",`По форме выделяют длинные, короткие, плоские, неправильные и сесамовидные кости. Форма связана с функцией, распределением нагрузки и механическими условиями, но не определяет её единолично.`]],
+terms:["Osteology — остеология","Skeleton — скелет","Bone — кость","Axial skeleton — осевой скелет","Appendicular skeleton — добавочный скелет"],note:"Число 206 — стандартный учебный подсчёт для взрослого скелета, а не абсолютное число для каждого человека."},
+"lesson-02":{title:"Позвоночник",tag:"МОДУЛЬ 02 • АНАТОМИЯ И БИОМЕХАНИКА",lead:"Позвоночный столб сочетает опорную функцию, защиту спинного мозга и подвижность туловища. Его сегменты работают как взаимосвязанная система.",sections:[
+["Отделы позвоночника",`Обычно выделяют 7 шейных, 12 грудных, 5 поясничных позвонков, 5 сросшихся крестцовых сегментов и обычно 4 копчиковых. В стандартном подсчёте это 24 подвижных позвонка и крестец с копчиком.`],
+["Межпозвоночные диски",`Обычно присутствуют 23 диска между телами позвонков от C2–C3 до L5–S1. Диск включает фиброзное кольцо и пульпозное ядро; он распределяет нагрузку и участвует в движении сегмента.`],
+["Движение и стабильность",`Сгибание, разгибание, боковой наклон и ротация распределяются неодинаково между отделами. Ориентация суставных отростков, рёбра, диски, связки и мышцы влияют на доступную кинематику.`]],
+terms:["Vertebral column — позвоночный столб","Intervertebral disc — межпозвоночный диск","Spinal cord — спинной мозг","Cervical — шейный","Lumbar — поясничный"],note:"Не следует сводить позвоночник к набору одинаковых шарниров: геометрия и функция сегментов различаются."},
+"lesson-03":{title:"Плечевой пояс и верхняя конечность",tag:"МОДУЛЬ 03 • АНАТОМИЯ И ДВИЖЕНИЕ",lead:"Плечевой комплекс обеспечивает широкий диапазон движений руки благодаря координации нескольких анатомических сочленений.",sections:[
+["Кости и суставы",`В свободной верхней конечности обычно 30 костей: плечевая, локтевая и лучевая, 8 костей запястья, 5 пястных и 14 фаланг. Плечевой комплекс включает грудино-ключичное, акромиально-ключичное, плечевое суставы и функциональное лопаточно-грудное сочленение.`],
+["Вращательная манжета",`Надостная, подостная, малая круглая и подлопаточная мышцы (SITS) динамически стабилизируют головку плечевой кости и участвуют в управлении движением.`],
+["Лопаточно-плечевой ритм",`Подъём руки требует согласованного движения плечевой кости, лопатки и ключицы. Часто приводимое соотношение 2:1 — упрощённая модель, а не универсальная константа для всех людей и фаз движения.`]],
+terms:["Scapula — лопатка","Clavicle — ключица","Rotator cuff — вращательная манжета","Glenohumeral joint — плечевой сустав"],note:"Для анализа движения важно учитывать плоскость, нагрузку, скорость, индивидуальную анатомию и фазу движения."},
+"lesson-04":{title:"Таз и нижняя конечность",tag:"МОДУЛЬ 04 • АНАТОМИЯ И ФУНКЦИЯ",lead:"Нижняя конечность передаёт нагрузку между туловищем и опорой, обеспечивает устойчивость, ходьбу и перемещение центра масс.",sections:[
+["Тазовый пояс и свободная конечность",`Тазовый пояс образован двумя тазовыми костями. Свободная нижняя конечность обычно включает 30 костей с каждой стороны: бедренную, надколенник, большеберцовую, малоберцовую, 7 костей предплюсны, 5 плюсневых и 14 фаланг.`],
+["Коленный сустав",`Коленный комплекс включает бедренно-большеберцовое и бедренно-надколенниковое сочленения. Мениски повышают конгруэнтность и распределяют нагрузку; крестообразные и коллатеральные связки ограничивают избыточные смещения и помогают контролировать стабильность.`],
+["Стопа и ходьба",`Стопа адаптируется к поверхности и передаёт усилие при отталкивании. Продольные и поперечная арки участвуют в распределении нагрузки. Цикл ходьбы обычно описывают фазами опоры и переноса.`]],
+terms:["Pelvis — таз","Femur — бедренная кость","Tibia — большеберцовая кость","Meniscus — мениск","Gait cycle — цикл ходьбы"],note:"Тазовый пояс не следует смешивать со свободной нижней конечностью: это разные анатомические категории."},
+"lesson-05":{title:"Нервная система и нейромышечный контроль",tag:"МОДУЛЬ 05 • НЕЙРОФИЗИОЛОГИЯ",lead:"Движение возникает благодаря взаимодействию центральной нервной системы, периферических нервов, сенсорной обратной связи и мышц.",sections:[
+["Центральная нервная система",`Головной и спинной мозг образуют ЦНС. Двигательная кора участвует в произвольном управлении, мозжечок — в координации и адаптации движений, ствол мозга — в жизненно важных и постуральных функциях. Реальное управление распределено по нейронным сетям.`],
+["Моторная единица",`Моторная единица — альфа-мотонейрон и все мышечные волокна, которые он иннервирует. Сила мышцы регулируется, в частности, рекрутированием моторных единиц и частотой их импульсации.`],
+["Сенсорная обратная связь",`Мышечные веретёна чувствительны к длине мышцы и скорости её изменения. Сухожильные органы Гольджи реагируют на напряжение. Проприоцептивная информация интегрируется с зрительными и вестибулярными сигналами для контроля позы и движения.`]],
+terms:["CNS — центральная нервная система","Motor unit — моторная единица","Proprioception — проприоцепция","Muscle spindle — мышечное веретено","Golgi tendon organ — сухожильный орган Гольджи"],note:"Нейромышечный контроль — многоуровневая система. Нельзя объяснять сложное движение одним рефлексом или одной мышцей."}
+};
+const quizItems=[
+{q:"Сколько костей обычно насчитывают в скелете взрослого человека в стандартной анатомической схеме?",a:["186","196","206","216"],correct:2,why:"Стандартный учебный подсчёт — 206 костей: 80 осевого и 126 добавочного скелета."},
+{q:"Какие мышцы входят во вращательную манжету плеча?",a:["Дельтовидная, большая грудная, широчайшая и трапециевидная","Надостная, подостная, малая круглая и подлопаточная","Двуглавая, трёхглавая, плечевая и клювовидно-плечевая","Ромбовидная, передняя зубчатая, малая грудная и трапециевидная"],correct:1,why:"Вращательная манжета образована четырьмя мышцами: supraspinatus, infraspinatus, teres minor и subscapularis."},
+{q:"Сколько межпозвоночных дисков обычно имеется у взрослого человека?",a:["21","22","23","24"],correct:2,why:"Обычно 23 диска располагаются от уровня C2–C3 до L5–S1."},
+{q:"Что такое моторная единица?",a:["Один мышечный пучок и фасция","Альфа-мотонейрон и иннервируемые им мышечные волокна","Все мышцы одной анатомической области","Один сухожильный орган и одна мышца"],correct:1,why:"Моторная единица включает один альфа-мотонейрон и все волокна, которые он иннервирует."},
+{q:"Сколько костей обычно включает свободная нижняя конечность с одной стороны?",a:["26","28","30","32"],correct:2,why:"Свободная нижняя конечность включает 30 костей; тазовая кость относится к тазовому поясу."}
+];
+let completed=JSON.parse(localStorage.getItem("axelCompleted")||"[]");
+let currentQuiz=0, quizAnswers={};
+const main=document.getElementById("main");
+function updateProgress(){let n=completed.length,p=Math.round(n/modules.length*100);document.getElementById("progressTop").textContent=p+"% пройдено";document.getElementById("progressLabel").textContent=p+"% завершено";document.getElementById("lessonCount").textContent=n+" / "+modules.length;document.getElementById("progressBar").style.width=p+"%";}
+function home(){main.innerHTML=`<section class="hero"><div class="eyebrow">ЗНАНИЯ • АНАТОМИЯ • ДВИЖЕНИЕ</div><h1>Изучай тело.<br><em>Понимай движение.</em></h1><p>Единая учебная среда по анатомии, физиологии, биомеханике и реабилитации.</p><button class="primary" data-open="lesson-01">Начать обучение <span>→</span></button><div class="hero-axel"><div class="orb"></div><div class="axel-letter">A<span>×</span></div><div class="hero-caption">LEARN / MOVE / RECOVER</div></div></section><section class="section-head"><div><div class="eyebrow">ТВОЯ ПРОГРАММА</div><h2>Направления обучения</h2></div><button class="text-btn" data-view="library">Вся библиотека →</button></section><div class="course-grid" id="courseGrid"></div><section class="section-head modules-head"><div><div class="eyebrow">АНАТОМИЧЕСКАЯ ОСНОВА</div><h2>Учебные модули</h2></div><span class="muted">01—05</span></section><div id="moduleList" class="module-list"></div><footer>AXEL ACADEMY <span>Учебный проект • Версия 0.2</span></footer>`;document.getElementById("courseGrid").innerHTML=courses.map(c=>`<article class="course" data-open="${c[3]}"><div class="symbol">${c[0]}</div><h3>${c[1]}</h3><p>${c[2]}</p></article>`).join("");document.getElementById("moduleList").innerHTML=modules.map(m=>moduleHTML(m)).join("");}
+function moduleHTML(m){return `<article class="module" data-open="${m.lesson}"><div class="module-num">${m.id}</div><div class="module-info"><b>${m.title}</b><small>${m.sub}</small></div><div class="status ${completed.includes(m.lesson)?"done":""}">${completed.includes(m.lesson)?"✓ ИЗУЧЕНО":"ОТКРЫТЬ →"}</div></article>`}
+function showLesson(id){let l=lessons[id];if(!l)return;main.innerHTML=`<div class="content-page"><button class="back" data-view="home">← На главную</button><div class="eyebrow">${l.tag}</div><h1>${l.title}</h1><p class="lead">${l.lead}</p><div class="lesson-card"><h3>Ключевые понятия</h3>${l.terms.map(t=>`<span class="term">${t}</span>`).join("")}</div>${l.sections.map(s=>`<article class="lesson-card"><h3>${s[0]}</h3>${s[1]}</article>`).join("")}<div class="callout"><b>Важно:</b> ${l.note}</div><div class="lesson-card"><h3>Научная добросовестность</h3><p>Статус материала: <strong>ANATOMY_DOCUMENTED — учебное изложение</strong>. Биомеханическая и клиническая валидация не заявлены. Перед клиническим применением необходимы профильная экспертиза и проверка доказательств.</p></div><div class="lesson-actions"><button class="primary" id="completeLesson" data-complete="${id}">${completed.includes(id)?"Урок завершён ✓":"Отметить урок изученным ✓"}</button><button class="secondary" data-view="quiz">Перейти к тесту →</button></div></div>`}
+function library(){main.innerHTML=`<div class="content-page"><button class="back" data-view="home">← На главную</button><div class="eyebrow">БАЗА ЗНАНИЙ</div><h1>Библиотека обучения</h1><p class="lead">Поиск по пяти базовым модулям. Выбери тему, чтобы открыть учебный материал.</p><input class="search" id="search" placeholder="Поиск по анатомии, суставам, нервной системе…"><div class="module-list" id="searchResults">${modules.map(moduleHTML).join("")}</div></div>`;document.getElementById("search").addEventListener("input",e=>{let q=e.target.value.toLowerCase();document.getElementById("searchResults").innerHTML=modules.filter(m=>(m.title+" "+m.sub).toLowerCase().includes(q)).map(moduleHTML).join("")||'<div class="empty">Ничего не найдено.</div>'})}
+function atlas(){main.innerHTML=`<div class="content-page"><button class="back" data-view="home">← На главную</button><div class="eyebrow">АНАТОМИЧЕСКИЙ АТЛАС</div><h1>Карта систем организма</h1><p class="lead">Структурированная точка входа в анатомическую базу. Сейчас доступен учебный каталог модулей; интерактивные 3D-модели будут добавляться после проверки анатомических данных.</p><div class="lesson-card"><h3>Системы организма</h3><p><strong>Опорно-двигательная:</strong> кости, суставы, связки, мышцы, сухожилия.</p><p><strong>Нервная:</strong> головной и спинной мозг, периферические нервы, сенсорные и моторные пути.</p><p><strong>Сердечно-сосудистая:</strong> сердце, сосуды и транспорт веществ.</p><p><strong>Дыхательная:</strong> воздухоносные пути и газообмен.</p><p><strong>Пищеварительная:</strong> органы пищеварения и всасывание.</p></div><div class="module-list">${modules.map(moduleHTML).join("")}</div></div>`}
+function quiz(){let item=quizItems[currentQuiz];main.innerHTML=`<div class="content-page"><button class="back" data-view="home">← На главную</button><div class="eyebrow">КОНТРОЛЬ ЗНАНИЙ • ВОПРОС ${currentQuiz+1} ИЗ ${quizItems.length}</div><h1>Проверь понимание</h1><div class="bar"><i style="width:${(currentQuiz+1)/quizItems.length*100}%"></i></div><article class="lesson-card"><h3>${item.q}</h3>${item.a.map((a,i)=>`<button class="quiz-option ${quizAnswers[currentQuiz]===i?"selected":""}" data-answer="${i}">${String.fromCharCode(65+i)}. ${a}</button>`).join("")}<div id="quizFeedback"></div></article><div class="lesson-actions"><button class="primary" id="nextQuiz" ${quizAnswers[currentQuiz]===undefined?"disabled":""}>${currentQuiz===quizItems.length-1?"Завершить тест":"Следующий вопрос →"}</button></div></div>`}
+function showView(v){document.querySelectorAll(".nav").forEach(b=>b.classList.toggle("active",b.dataset.view===v));if(v==="home")home();if(v==="library")library();if(v==="atlas")atlas();if(v==="quiz"){currentQuiz=0;quizAnswers={};quiz()}}
+document.addEventListener("click",e=>{let v=e.target.closest("[data-view]");if(v){showView(v.dataset.view);return}let o=e.target.closest("[data-open]");if(o){showLesson(o.dataset.open);return}let c=e.target.closest("[data-complete]");if(c){if(!completed.includes(c.dataset.complete))completed.push(c.dataset.complete);localStorage.setItem("axelCompleted",JSON.stringify(completed));updateProgress();showLesson(c.dataset.complete);return}let a=e.target.closest("[data-answer]");if(a){quizAnswers[currentQuiz]=Number(a.dataset.answer);quiz();let item=quizItems[currentQuiz],fb=document.getElementById("quizFeedback");fb.className="feedback";fb.textContent=(quizAnswers[currentQuiz]===item.correct?"Верно. ":"Пока неверно. ")+item.why;return}if(e.target.id==="nextQuiz"){if(currentQuiz<quizItems.length-1){currentQuiz++;quiz()}else{let score=quizItems.filter((q,i)=>quizAnswers[i]===q.correct).length;main.innerHTML=`<div class="content-page"><div class="eyebrow">РЕЗУЛЬТАТ</div><h1>Тест завершён</h1><div class="lesson-card"><h3>Твой результат: ${score} из ${quizItems.length}</h3><p>${score===5?"Отличная работа.":score>=3?"Хорошая база. Повтори вопросы, где были ошибки.":"Вернись к учебным модулям и закрепи материал."}</p></div><button class="primary" data-view="home">Вернуться на главную →</button></div>`}}});
+showView("home");updateProgress();
+
+
+
+==============================================================================
+README / ИНСТРУКЦИЯ
+# AXEL Academy — v0.2
+
+Статическое учебное веб-приложение на HTML, CSS и JavaScript. Подходит для публикации через GitHub Pages.
+
+## Публикация через GitHub Pages
+
+1. Создай новый публичный репозиторий на GitHub, например `axel-academy`.
+2. Загрузи в корень репозитория файлы `index.html`, `styles.css`, `app.js` и `README.md`.
+3. Открой **Settings → Pages**.
+4. В разделе **Build and deployment** выбери **Deploy from a branch**.
+5. Выбери ветку `main` и папку `/ (root)`, нажми **Save**.
+6. Через минуту GitHub покажет адрес опубликованного сайта в разделе Pages.
+
+## Локальный запуск
+
+Можно просто открыть `index.html` в браузере. Для локального сервера подойдет расширение Live Server в VS Code.
+
+## Что есть в прототипе
+
+- адаптивный интерфейс для компьютера и телефона;
+- главная страница и каталог пяти учебных модулей;
+- уроки 01–05: остеология, позвоночник, плечевой комплекс, таз и нижняя конечность, нейромышечный контроль;
+- поиск по библиотеке;
+- базовый тест из пяти вопросов;
+- локальное сохранение завершённых уроков через `localStorage`.
+
+## Ограничения текущей версии
+
+- Прогресс хранится только в конкретном браузере и на конкретном устройстве.
+- Серверной базы данных, регистрации пользователей и синхронизации между устройствами пока нет.
+- Это учебный прототип, а не медицинское изделие и не система клинических рекомендаций.
+- Материалы требуют редакционной проверки и ссылок на первоисточники перед профессиональным использованием.
+- Внешний шрифт загружается из Google Fonts; без интернета используется системный запасной шрифт.
+
+## Следующий этап
+
+1. Расширить каталог анатомических структур и связей.
+2. Добавить проверяемые источники к каждому учебному утверждению.
+3. Создать схему PostgreSQL и импортируемый набор данных.
+4. Подключить 3D-атлас и отдельные статусы биомеханической и клинической валидации.
